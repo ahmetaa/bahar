@@ -40,8 +40,8 @@ public class DersBilgisi {
 
     public static DersBilgisi ornek() {
         DersBilgisi dersBilgisi = new DersBilgisi(
-                "mini mini bir kus donmustu pencereme konmustu aldim onu iceriye cik cik cik cik otsun diye" +
-                        " pir pir ederken canlandi ellerim bak bos kaldi ");
+                "Mini mini bir kus donmustu pencereme konmustu Aldim onu iceriye cik cik cik cik otsun diye" +
+                        " Pir pir ederken canlandi ellerim bak bos kaldi ");
         dersBilgisi.kullaniciAdi = "Ahmet A. Akin";
         dersBilgisi.kullaniciNumarasi = "12345";
         dersBilgisi.kullaniciSinifi = "4-B";

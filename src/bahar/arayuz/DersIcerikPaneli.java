@@ -43,6 +43,10 @@ public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
         current().goActive();
     }
 
+    public char beklenenHarf() {
+        return current().beklenenHarf();
+    }
+
     private SatirPaneli current() {
         return satirlar.get(currentLine);
     }
@@ -231,6 +235,10 @@ public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
         public void eraseCursor() {
             if (yazilan.length() > 0)
                 this.yazilanSatir.setText(this.yazilan.substring(0, yazilan.length() - 1));
+        }
+
+        public char beklenenHarf() {
+            return beklenenString.charAt(cursor);
         }
 
         class TextLayoutInfo {
