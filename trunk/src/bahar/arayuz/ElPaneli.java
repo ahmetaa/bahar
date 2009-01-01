@@ -57,7 +57,6 @@ public class ElPaneli extends JPanel {
         private Parmak parmak = Parmak.TANIMSIZ;
         // if true, panel do not fire finger change events and finger recktangle cannot be altered.
         boolean readOnly = false;
-        Font font = new Font("Tahoma", Font.BOLD, 12);
 
 
         public Parmak getSelectedFinger() {
@@ -124,14 +123,6 @@ public class ElPaneli extends JPanel {
                 g2.setColor(Color.RED);
                 g2.fill(parmakKareTablosu.get(parmak));
             }
-            g2.setFont(font);
-            String message;
-            if (hand == El.SAG)
-                message = "Sag";
-            else
-                message = "Sol";
-            g2.drawString(message, 145, 190);
-
         }
     }
 }
