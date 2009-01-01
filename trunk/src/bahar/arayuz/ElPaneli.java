@@ -1,0 +1,111 @@
+package bahar.arayuz;
+
+import javax.swing.*;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.awt.*;
+import java.util.Map;
+import java.io.IOException;
+import java.io.File;
+
+import org.jmate.Collects;
+import bahar.bilgi.El;
+import bahar.bilgi.Parmak;
+import net.miginfocom.swing.MigLayout;
+
+
+public class ElPaneli extends JPanel {
+
+    public ElPaneli() {
+        this.setLayout(new MigLayout());
+        this.add(new TekEl(El.SOL, Parmak.TANIMSIZ));
+        this.add(new TekEl(El.SAG, Parmak.ISARET));
+    }
+
+    private class TekEl extends JPanel {
+
+        private BufferedImage ElResmi;
+        private El hand;
+        public static final int KARE_BOYUTU = 30;
+        private Map<Parmak, Rectangle> parmakKareTablosu = Collects.newHashMap();
+        private Parmak parmak = Parmak.TANIMSIZ;
+        // if true, panel do not fire finger change events and finger recktangle cannot be altered.
+        boolean readOnly = false;
+        Font font = new Font("Tahoma", Font.BOLD, 12);
+
+
+        public Parmak getSelectedFinger() {
+            return parmak;
+        }
+
+        public void setFinger(Parmak parmak) {
+            this.parmak = parmak;
+            repaint();
+        }
+
+        public TekEl(El el, Parmak initialFinger) {
+            // right hand finger locations.
+            // this center finger locations should be measured from the right-hand image.
+            Point[] locations = {
+                    new Point(16, 134),
+                    new Point(68, 35),
+                    new Point(116, 18),
+                    new Point(156, 35),
+                    new Point(188, 76)};
+            this.hand = el;
+
+            try {
+                if (el == El.SAG) {
+                    //ElResmi = ImageIO.read(this.getClass().getResource("/resimler/right_hand.png"));
+                    ElResmi = ImageIO.read(new File("kaynaklar/resimler/right_hand.png"));
+                    for (Point point : locations) {
+                        point.setLocation(point.x - KARE_BOYUTU / 2, point.y - KARE_BOYUTU / 2);
+                    }
+                } else {
+                    //ElResmi = ImageIO.read(this.getClass().getResource("/resimler/left_hand.png"));
+                    ElResmi = ImageIO.read(new File("kaynaklar/resimler/left_hand.png"));
+                    //if this is the left hand, recalculate the x positions.
+                    for (Point point : locations) {
+                        point.setLocation(ElResmi.getWidth() - point.x - KARE_BOYUTU / 2, point.y - KARE_BOYUTU / 2);
+                    }
+                }
+                ElResmi.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            // create parmakKareTablosu for each finger. select the index finger rectangle initially.
+            for (int i = 0; i < locations.length; i++) {
+                Rectangle rec = new Rectangle(locations[i], new Dimension(KARE_BOYUTU, KARE_BOYUTU));
+                Parmak finger = Parmak.values()[i];
+                parmakKareTablosu.put(finger, rec);
+            }
+
+            parmak = initialFinger;
+
+            this.setPreferredSize(new Dimension(ElResmi.getWidth(), ElResmi.getHeight()));
+        }
+
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.drawImage(ElResmi, null, 0, 0);
+
+            // Paint the red frame around parmak finger.
+            if (parmak != Parmak.TANIMSIZ) {
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
+                g2.setColor(Color.RED);
+                g2.fill(parmakKareTablosu.get(parmak));
+            }
+            g2.setFont(font);
+            String message;
+            if (hand == El.SAG)
+                message = "Sag";
+            else
+                message = "Sol";
+            g2.drawString(message, 145, 190);
+
+        }
+    }
+}
