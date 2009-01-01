@@ -11,15 +11,41 @@ import java.io.File;
 import org.jmate.Collects;
 import bahar.bilgi.El;
 import bahar.bilgi.Parmak;
+import bahar.bilgi.ParmakBilgisi;
 import net.miginfocom.swing.MigLayout;
 
 
 public class ElPaneli extends JPanel {
 
+    TekEl sagEl, solEl;
+
+
     public ElPaneli() {
         this.setLayout(new MigLayout());
-        this.add(new TekEl(El.SOL, Parmak.TANIMSIZ));
-        this.add(new TekEl(El.SAG, Parmak.ISARET));
+        solEl = new TekEl(El.SOL, Parmak.TANIMSIZ);
+        sagEl = new TekEl(El.SAG, Parmak.TANIMSIZ);
+        this.add(solEl);
+        this.add(sagEl);
+    }
+
+    public void setParmakBilgisi(ParmakBilgisi pb) {
+        if (pb.el == El.SAG) {
+            sagEl.setFinger(pb.parmak);
+            if (pb.shift)
+                solEl.setFinger(Parmak.SERCE);
+            else if (pb.altGr)
+                solEl.setFinger(Parmak.YUZUK);
+            else
+                solEl.setFinger(Parmak.TANIMSIZ);
+        } else {
+            solEl.setFinger(pb.parmak);
+            if (pb.shift)
+                sagEl.setFinger(Parmak.SERCE);
+            else if (pb.altGr)
+                sagEl.setFinger(Parmak.YUZUK);
+            else
+                sagEl.setFinger(Parmak.TANIMSIZ);
+        }
     }
 
     private class TekEl extends JPanel {

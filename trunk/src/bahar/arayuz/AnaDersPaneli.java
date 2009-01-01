@@ -14,6 +14,7 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
 
     DersBilgisi dersBilgisi;
     DurumPaneli durumPaneli;
+    ElPaneli elPaneli;
     DersOturumu dersOturumu;
     DersIcerikPaneli dersIcerikPaneli;
     Klavye klavye;
@@ -33,7 +34,9 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
 
         this.add(durumPaneli, "wrap");
 
-        this.add(new ElPaneli());
+        elPaneli = new ElPaneli();
+        setParmakIsareti(dersIcerikPaneli.beklenenHarf());
+        this.add(elPaneli);
 
         this.setFocusable(true);
         this.addKeyListener(this);
@@ -48,14 +51,18 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.add(new AnaDersPaneli(DersBilgisi.ornek(), Klavyeler.amerikanQ()));
         f.pack();
-        //f.setSize(850, 450);
         f.setVisible(true);
     }
 
+    public void setParmakIsareti(char c) {
+        elPaneli.setParmakBilgisi(klavye.getPArmakBilgisi(c));
+    }
+
     public void keyTyped(KeyEvent e) {
-        if (klavye.karakterLegal(e.getKeyChar()))
+        if (klavye.karakterLegal(e.getKeyChar())) {
             dersIcerikPaneli.karakterYaz(e.getKeyChar());
-        else
+            setParmakIsareti(dersIcerikPaneli.beklenenHarf());
+        } else
             dersIcerikPaneli.ozelKarakter(e);
         validate();
     }

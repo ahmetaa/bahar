@@ -1,5 +1,5 @@
 package bahar.bilgi;
 
 public enum Parmak {
-    BAS, ISARET, ORTA, YUZUK, KUCUK, TANIMSIZ
+    BAS, ISARET, ORTA, YUZUK, SERCE, TANIMSIZ
 }
