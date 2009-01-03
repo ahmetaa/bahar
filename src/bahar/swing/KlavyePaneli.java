@@ -1,4 +1,4 @@
-package bahar.arayuz;
+package bahar.swing;
 
 public class KlavyePaneli {
 }

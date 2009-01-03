@@ -1,4 +1,4 @@
-package bahar.arayuz;
+package bahar.swing;
 
 import bahar.bilgi.DersBilgisi;
 import bahar.bilgi.OturumDinleyici;
@@ -20,42 +20,38 @@ public class DurumPaneli extends JPanel implements OturumDinleyici {
         this.setLayout(new MigLayout("wrap 2"));
 
         // ad
-        this.add(lbl(dersBilgisi.kullaniciAdi, 20), "span 2");
+        this.add(ComponentFactory.fixedLengthLabel(dersBilgisi.kullaniciAdi, 20), "span 2");
 
         // sureLbl
-        this.add(lbl("Sure ", 16));
-        sureLbl = lbl("00:00", 16);
+        this.add(ComponentFactory.fixedLengthLabel("Sure ", 16));
+        sureLbl = ComponentFactory.fixedLengthLabel("00:00", 16);
 
         this.add(sureLbl);
 
         // toplam
-        this.add(lbl("Toplam:", 16));
-        this.add(lbl(String.valueOf(dersBilgisi.harfSayisi), 16));
+        this.add(ComponentFactory.fixedLengthLabel("Toplam:", 16));
+        this.add(ComponentFactory.fixedLengthLabel(String.valueOf(dersBilgisi.harfSayisi), 16));
 
         // yazilan
-        this.add(lbl("Yazilan:", 16));
-        yazilanSayisiLbl = lbl("0", 16);
+        this.add(ComponentFactory.fixedLengthLabel("Yazilan:", 16));
+        yazilanSayisiLbl = ComponentFactory.fixedLengthLabel("0", 16);
         this.add(yazilanSayisiLbl);
 
 
         // hata sayisi
-        this.add(lbl("Hata:", 16));
-        hataSayisiLbl = lbl("0", 16);
+        this.add(ComponentFactory.fixedLengthLabel("Hata:", 16));
+        hataSayisiLbl = ComponentFactory.fixedLengthLabel("0", 16);
         this.add(hataSayisiLbl);
 
         // hizLbl
-        this.add(lbl("Hiz (harf/dk):", 16));
-        hizLbl = lbl("--", 16);
+        this.add(ComponentFactory.fixedLengthLabel("Hiz (harf/dk):", 16));
+        hizLbl = ComponentFactory.fixedLengthLabel("--", 16);
         this.add(hizLbl);
 
     }
 
 
-    private JLabel lbl(String text, int size) {
-        JLabel label = new JLabel(text);
-        label.setFont(new Font("Verdana", Font.PLAIN, size));
-        return label;
-    }
+
 
 
     public void saniyeArtti(int sn, String hiz) {
