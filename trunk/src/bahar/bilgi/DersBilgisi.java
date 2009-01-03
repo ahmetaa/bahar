@@ -19,6 +19,7 @@ public class DersBilgisi {
     public Klavye klavye;
     public boolean silmeyeIzinVer=false;
     public boolean hataGoster=true;
+    public boolean elGoster=true;
 
 
     public DersBilgisi(String content) {
