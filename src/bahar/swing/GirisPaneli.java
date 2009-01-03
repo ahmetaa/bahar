@@ -4,9 +4,16 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.IOException;
 
 import bahar.bilgi.Klavye;
 import bahar.bilgi.Klavyeler;
+import bahar.bilgi.DersBilgisi;
+import org.jmate.Systems;
+import org.jmate.SimpleFileReader;
 
 public class GirisPaneli extends JPanel {
 
@@ -19,6 +26,8 @@ public class GirisPaneli extends JPanel {
     private JCheckBox silmeyeIzinVer;
     private JTextField dersField;
     private JLabel hataLbl;
+    private JTextArea yaziAlani = new JTextArea();
+    private String currentDir;
 
     public GirisPaneli() {
 
@@ -49,13 +58,12 @@ public class GirisPaneli extends JPanel {
         jp.add(numaraLbl);
         jp.add(no, "wrap");
 
-        jp.add(new JPanel(), "wrap");        
+        jp.add(new JPanel(), "wrap");
         JLabel klavye = ComponentFactory.label("Klavye:");
         klavyeCombo = new JComboBox(new String[]{"Turkce F", "Turkce Q", "Amerikan Q"});
         klavyeCombo.setFont(ComponentFactory.VERDANA);
         jp.add(klavye);
         jp.add(klavyeCombo, "wrap");
-
 
         jp.add(ComponentFactory.label("Ders:"));
         dersField = ComponentFactory.textField();
@@ -63,8 +71,79 @@ public class GirisPaneli extends JPanel {
         JButton btn = new JButton("..");
         btn.setFont(ComponentFactory.VERDANA);
 
-        jp.add(btn);
+        currentDir = Systems.getUserHome().getAbsolutePath();
+        btn.addActionListener(new FileButtonListener(this));
 
+        jp.add(btn, "shrink");
+
+ //       JScrollPane jsp = new JScrollPane(yaziAlani);
+ //       jp.add(jsp, "span 3");
+        
+        jp.add(checkBoxPanel(), "span 3");
+
+        JButton btnStart = new JButton("Basla");
+        btnStart.setFont(ComponentFactory.VERDANA);
+
+
+        btnStart.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                new DersFrame(dersBilgisiUret(), getKlavye());
+            }
+        });
+
+        jp.add(btnStart, "gapleft 50");
+
+        return jp;
+    }
+
+    private class FileButtonListener implements ActionListener {
+
+        private Component component;
+
+        private FileButtonListener(Component component) {
+            this.component = component;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+
+            JFileChooser c;
+            if (currentDir == null)
+                c = new JFileChooser();
+            else
+                c = new JFileChooser(currentDir);
+
+            int rVal = c.showOpenDialog(component);
+            if (rVal == JFileChooser.APPROVE_OPTION) {
+                try {
+                    File f = c.getSelectedFile();
+                    String yazi = new SimpleFileReader(f).asString();
+                    yaziAlani.setColumns(30);
+                    yaziAlani.setRows(5);
+                    yaziAlani.setWrapStyleWord(true);
+                    yaziAlani.setText(yazi);
+                    currentDir = f.getAbsolutePath();
+                    component.validate();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+
+            }
+        }
+
+        public String getCurrentDir() {
+            return currentDir;
+        }
+    }
+
+    private JPanel hataPanel() {
+        hataLbl = ComponentFactory.boldLabel("");
+        JPanel jp = new JPanel(new MigLayout());
+        jp.add(hataLbl, "grow");
+        return jp;
+    }
+
+    private JPanel checkBoxPanel() {
+        JPanel jp = new JPanel(new MigLayout("wrap 2"));
         jp.add(new JPanel(), "wrap");
         jp.add(ComponentFactory.label("El resimlerini goster"));
         elGoster = new JCheckBox("", true);
@@ -73,17 +152,6 @@ public class GirisPaneli extends JPanel {
         jp.add(ComponentFactory.label("Durum penceresi goster"));
         durumGoster = new JCheckBox("", true);
         jp.add(durumGoster, "wrap");
-
-
-        //jp.add(ComponentFactory.label("Klavye goster"));
-
-        return jp;
-    }
-
-    private JPanel hataPanel() {
-        hataLbl = ComponentFactory.boldLabel("");
-        JPanel jp =  new JPanel(new MigLayout());
-        jp.add(hataLbl, "grow");
         return jp;
     }
 
@@ -103,7 +171,7 @@ public class GirisPaneli extends JPanel {
         f.setVisible(true);
     }
 
-    public Klavye getFromCombo() {
+    public Klavye getKlavye() {
         switch (klavyeCombo.getSelectedIndex()) {
             case 0:
                 return Klavyeler.turkceF();
@@ -113,5 +181,14 @@ public class GirisPaneli extends JPanel {
                 return Klavyeler.amerikanQ();
         }
         throw new IllegalArgumentException("Klavye bulunamadi!");
+    }
+
+    public DersBilgisi dersBilgisiUret() {
+        DersBilgisi dersBilgisi = new DersBilgisi(yaziAlani.getText());
+        dersBilgisi.kullaniciAdi = isim.getText().trim();
+        dersBilgisi.kullaniciNumarasi = no.getText().trim();
+        dersBilgisi.hataGoster = durumGoster.isSelected();
+        dersBilgisi.elGoster = elGoster.isSelected();
+        return dersBilgisi;
     }
 }
