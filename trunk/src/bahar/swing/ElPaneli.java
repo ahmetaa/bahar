@@ -1,12 +1,9 @@
 package bahar.swing;
 
 import javax.swing.*;
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.*;
 import java.util.Map;
-import java.io.IOException;
-import java.io.File;
 
 import org.jmate.Collects;
 import bahar.bilgi.El;
@@ -80,12 +77,12 @@ public class ElPaneli extends JPanel {
             this.hand = el;
 
             if (el == El.SAG) {
-                ElResmi = ComponentFactory.getImageResource("/resimler/right_hand.png");
+                ElResmi = ComponentFactory.getImageResource("/resimler/sag-el.png");
                 for (Point point : locations) {
                     point.setLocation(point.x - KARE_BOYUTU / 2, point.y - KARE_BOYUTU / 2);
                 }
             } else {
-                ElResmi = ComponentFactory.getImageResource("/resimler/left_hand.png");
+                ElResmi = ComponentFactory.getImageResource("/resimler/sol-el.png");
                 //if this is the left hand, recalculate the x positions.
                 for (Point point : locations) {
                     point.setLocation(ElResmi.getWidth() - point.x - KARE_BOYUTU / 2, point.y - KARE_BOYUTU / 2);
