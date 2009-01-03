@@ -234,8 +234,9 @@ public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
         }
 
         public void eraseCursor() {
+            String icerik = format(splitText(bicimliYazilan));
             if (yazilan.length() > 0)
-                this.yazilanSatir.setText(this.yazilan.substring(0, yazilan.length() - 1));
+                this.yazilanSatir.setText(icerik.substring(0, icerik.length() - 1));
         }
 
         public char beklenenHarf() {

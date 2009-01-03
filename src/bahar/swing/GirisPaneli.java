@@ -96,7 +96,7 @@ public class GirisPaneli extends JPanel {
             }
         });
 
-        jp.add(btnStart, "gapleft 50");
+        jp.add(btnStart,"span 3");
 
         return jp;
     }

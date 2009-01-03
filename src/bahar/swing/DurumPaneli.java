@@ -16,7 +16,7 @@ public class DurumPaneli extends JPanel implements OturumDinleyici {
 
     public DurumPaneli(DersBilgisi dersBilgisi) {
 
-        this.setBackground(Color.white);
+       // this.setBackground(Color.white);
         this.setLayout(new MigLayout("wrap 2"));
 
         // ad
@@ -49,10 +49,6 @@ public class DurumPaneli extends JPanel implements OturumDinleyici {
         this.add(hizLbl);
 
     }
-
-
-
-
 
     public void saniyeArtti(int sn, String hiz) {
         sureLbl.setText(sureFormatla(sn));

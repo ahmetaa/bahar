@@ -5,12 +5,11 @@ import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 
 import net.miginfocom.swing.MigLayout;
-import bahar.bilgi.DersBilgisi;
-import bahar.bilgi.DersOturumu;
-import bahar.bilgi.Klavye;
-import bahar.bilgi.Klavyeler;
+import bahar.bilgi.*;
+import org.bushe.swing.event.annotation.EventSubscriber;
+import org.bushe.swing.event.EventBus;
 
-public class AnaDersPaneli extends JPanel implements KeyListener {
+public class AnaDersPaneli extends JPanel implements KeyListener, IcerikDinleyici {
 
     DersBilgisi dersBilgisi;
     DurumPaneli durumPaneli;
@@ -18,6 +17,7 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
     DersOturumu dersOturumu;
     DersIcerikPaneli dersIcerikPaneli;
     Klavye klavye;
+    StatusLabel statusLabel = new StatusLabel();
 
     boolean basladi = false;
     boolean durakladi = false;
@@ -26,23 +26,35 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
         this.dersBilgisi = dersBilgisi;
         this.klavye = klavye;
 
-        MigLayout ml = new MigLayout();
+        MigLayout ml = new MigLayout("", "[center][center]", "[center][center]");
         this.setLayout(ml);
 
-        DurumPaneli durumPaneli = new DurumPaneli(dersBilgisi);
-        this.dersOturumu = new DersOturumu(dersBilgisi, durumPaneli);
+        durumPaneli = new DurumPaneli(dersBilgisi);
+
+        dersOturumu = new DersOturumu(dersBilgisi, durumPaneli);
 
         dersIcerikPaneli = new DersIcerikPaneli(dersBilgisi, this.dersOturumu);
-        this.add(dersIcerikPaneli);
 
-        this.add(durumPaneli, "wrap");
+        if (dersBilgisi.elGoster)
+            this.add(dersIcerikPaneli);
+        else
+            this.add(dersIcerikPaneli, "wrap");
+
+        if (dersBilgisi.elGoster)
+            this.add(durumPaneli, "wrap");
 
         elPaneli = new ElPaneli();
         setParmakIsareti(dersIcerikPaneli.beklenenHarf());
-        this.add(elPaneli);
+
+        if (dersBilgisi.hataGoster)
+            this.add(elPaneli, "wrap");
+
+        this.add(statusLabel," align left");
 
         this.setFocusable(true);
         this.addKeyListener(this);
+
+        EventBus.publish(new StatusEvent("Bir tus basinca oturum baslayacak. Duraklama icin ESC tusunu kullanin."));
     }
 
 
@@ -62,10 +74,10 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
     public void keyTyped(KeyEvent e) {
         if (klavye.harfYazilabilir(e.getKeyChar())) {
             if (!basladi) {
-               basladi = true;
-               dersOturumu.devamEt();
+                basladi = true;
+                dersOturumu.devamEt();
             }
-            if(durakladi) {
+            if (durakladi) {
                 dersOturumu.devamEt();
                 durakladi = false;
             }
@@ -73,8 +85,9 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
             setParmakIsareti(dersIcerikPaneli.beklenenHarf());
 
         } else {
-            if(e.getKeyChar() == KeyEvent.VK_ESCAPE) {
-                if(!durakladi) {
+            if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
+                if (!durakladi) {
+                    EventBus.publish(new StatusEvent("Oturum Durakladi.. ESC tusu ile devam edebilirsiniz."));
                     System.out.println("Durakla..");
                     durakladi = true;
                     dersOturumu.durakla();
@@ -95,5 +108,21 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
 
     public void keyReleased(KeyEvent e) {
         // gerek yok
+    }
+
+    public void dersBitti() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void dersDurakladi() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void dersYenidenBasladi() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void dersBasladi() {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }
