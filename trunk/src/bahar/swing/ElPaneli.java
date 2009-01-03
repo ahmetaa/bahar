@@ -1,4 +1,4 @@
-package bahar.arayuz;
+package bahar.swing;
 
 import javax.swing.*;
 import javax.imageio.ImageIO;
@@ -79,25 +79,19 @@ public class ElPaneli extends JPanel {
                     new Point(188, 76)};
             this.hand = el;
 
-            try {
-                if (el == El.SAG) {
-                    //ElResmi = ImageIO.read(this.getClass().getResource("/resimler/right_hand.png"));
-                    ElResmi = ImageIO.read(new File("kaynaklar/resimler/right_hand.png"));
-                    for (Point point : locations) {
-                        point.setLocation(point.x - KARE_BOYUTU / 2, point.y - KARE_BOYUTU / 2);
-                    }
-                } else {
-                    //ElResmi = ImageIO.read(this.getClass().getResource("/resimler/left_hand.png"));
-                    ElResmi = ImageIO.read(new File("kaynaklar/resimler/left_hand.png"));
-                    //if this is the left hand, recalculate the x positions.
-                    for (Point point : locations) {
-                        point.setLocation(ElResmi.getWidth() - point.x - KARE_BOYUTU / 2, point.y - KARE_BOYUTU / 2);
-                    }
+            if (el == El.SAG) {
+                ElResmi = ComponentFactory.getImageResource("/resimler/right_hand.png");
+                for (Point point : locations) {
+                    point.setLocation(point.x - KARE_BOYUTU / 2, point.y - KARE_BOYUTU / 2);
                 }
-                ElResmi.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } else {
+                ElResmi = ComponentFactory.getImageResource("/resimler/left_hand.png");
+                //if this is the left hand, recalculate the x positions.
+                for (Point point : locations) {
+                    point.setLocation(ElResmi.getWidth() - point.x - KARE_BOYUTU / 2, point.y - KARE_BOYUTU / 2);
+                }
             }
+            ElResmi.flush();
 
             // create parmakKareTablosu for each finger. select the index finger rectangle initially.
             for (int i = 0; i < locations.length; i++) {
@@ -120,7 +114,7 @@ public class ElPaneli extends JPanel {
             // Paint the red frame around parmak finger.
             if (parmak != Parmak.TANIMSIZ) {
                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
-                g2.setColor(Color.RED);
+                g2.setColor(Color.GREEN);
                 g2.fill(parmakKareTablosu.get(parmak));
             }
         }

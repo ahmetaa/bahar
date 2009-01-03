@@ -32,7 +32,7 @@ public class Klavye {
         return parmakTablosu.get(c);
     }
 
-    public boolean karakterLegal(char c) {
+    public boolean harfYazilabilir(char c) {
         return tumKArakterler.indexOf(c) > 0;
     }
 }

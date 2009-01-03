@@ -15,7 +15,6 @@ public class DersOturumu {
 
     public DersBilgisi dersBilgisi;
 
-    Timer timer = new Timer("MyTimer");
     private AtomicBoolean running = new AtomicBoolean(false);
 
     private final OturumDinleyici dinleyici;
@@ -49,6 +48,7 @@ public class DersOturumu {
     }
 
     public void initialize() {
+        Timer timer = new Timer("MyTimer");
         TimerTask timerTask = new TimerTask() {
             public void run() {
                 if (running.get()) {
@@ -60,11 +60,11 @@ public class DersOturumu {
         timer.schedule(timerTask, 0, 1000);
     }
 
-    public void stop() {
+    public void durakla() {
         running.set(false);
     }
 
-    public void go() {
+    public void devamEt() {
         running.set(true);
     }
 

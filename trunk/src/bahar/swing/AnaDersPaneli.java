@@ -1,4 +1,4 @@
-package bahar.arayuz;
+package bahar.swing;
 
 import javax.swing.*;
 import java.awt.event.KeyListener;
@@ -60,13 +60,13 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
     }
 
     public void keyTyped(KeyEvent e) {
-        if (klavye.karakterLegal(e.getKeyChar())) {
+        if (klavye.harfYazilabilir(e.getKeyChar())) {
             if (!basladi) {
                basladi = true;
-               dersOturumu.go();
+               dersOturumu.devamEt();
             }
             if(durakladi) {
-                dersOturumu.go();
+                dersOturumu.devamEt();
                 durakladi = false;
             }
             dersIcerikPaneli.karakterYaz(e.getKeyChar());
@@ -77,10 +77,10 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
                 if(!durakladi) {
                     System.out.println("Durakla..");
                     durakladi = true;
-                    dersOturumu.stop();
+                    dersOturumu.durakla();
                 } else {
                     System.out.println("Basla....");
-                    dersOturumu.go();
+                    dersOturumu.devamEt();
                     durakladi = false;
                 }
             }

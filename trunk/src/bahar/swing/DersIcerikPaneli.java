@@ -1,4 +1,4 @@
-package bahar.arayuz;
+package bahar.swing;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -105,7 +105,7 @@ public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
         final String beklenenString;
         String bicimliYazilan = "";
         int cursor = 0;
-        boolean lastWasError = true;
+        boolean lastWasError = false;
         final SatirDinleyici satirDinleyici;
 
         public SatirPaneli(String beklenenString, SatirDinleyici satirDinleyici) {
@@ -117,9 +117,9 @@ public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
             this.beklenenString = beklenenString;
 
             yazilacakSatir.setText(beklenenString);
-            yazilacakSatir.setFont(new Font("Lucida Console", Font.PLAIN, 15));
+            yazilacakSatir.setFont(new Font("Lucida Console", Font.PLAIN, 18));
             yazilacakSatir.setForeground(Color.DARK_GRAY);
-            yazilanSatir.setFont(new Font("Lucida Console", Font.PLAIN, 15));
+            yazilanSatir.setFont(new Font("Lucida Console", Font.PLAIN, 18));
             yazilanSatir.setText(Strings.repeat(" ", beklenenString.length()));
             yazilanSatir.setForeground(Color.BLACK);
 
@@ -196,7 +196,8 @@ public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
                 list.add(new TextLayoutInfo(cnt, false));
                 return list;
             }
-            //System.out.println(Arrays.toString(splitz));
+            System.out.println(Arrays.toString(splitz));
+            System.out.println(bicimliYazilan);
             int i = 0;
             for (String s : splitz) {
 
