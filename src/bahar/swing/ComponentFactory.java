@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class ComponentFactory {
 
-    public static final Icon PAPATYA_RESIM = getIcon("bellis.jpg");
+    public static final Icon GIRIS_RESIM = getIcon("giris_resmi.jpg");
 
     public static Icon getIcon(String fileName) {
         return new ImageIcon(ComponentFactory.class.getResource("/resimler/" + fileName));
@@ -24,6 +24,7 @@ public class ComponentFactory {
     }
 
     public static Font VERDANA = new Font("Verdana", Font.PLAIN, 14);
+    public static Font VERDANA_BOLD = new Font("Verdana", Font.BOLD, 14);
 
     public static JLabel label(String text, int size) {
         JLabel label = new JLabel(text);
@@ -34,6 +35,12 @@ public class ComponentFactory {
     public static JLabel label(String text) {
         JLabel label = new JLabel(text);
         label.setFont(VERDANA);
+        return label;
+    }
+
+    public static JLabel boldLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setFont(VERDANA_BOLD);
         return label;
     }
 
