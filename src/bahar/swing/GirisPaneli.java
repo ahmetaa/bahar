@@ -14,6 +14,7 @@ import bahar.bilgi.Klavyeler;
 import bahar.bilgi.DersBilgisi;
 import org.jmate.Systems;
 import org.jmate.SimpleFileReader;
+import org.jmate.Strings;
 
 public class GirisPaneli extends JPanel {
 
@@ -76,18 +77,22 @@ public class GirisPaneli extends JPanel {
 
         jp.add(btn, "shrink");
 
- //       JScrollPane jsp = new JScrollPane(yaziAlani);
- //       jp.add(jsp, "span 3");
-        
+        //       JScrollPane jsp = new JScrollPane(yaziAlani);
+        //       jp.add(jsp, "span 3");
+
         jp.add(checkBoxPanel(), "span 3");
 
         JButton btnStart = new JButton("Basla");
         btnStart.setFont(ComponentFactory.VERDANA);
 
 
-        btnStart.addActionListener(new ActionListener(){
+        btnStart.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                new DersFrame(dersBilgisiUret(), getKlavye());
+                if (validateform()) {
+                    new DersFrame(dersBilgisiUret(), getKlavye());
+                    hataLbl.setText("");
+                    validate();
+                }
             }
         });
 
@@ -117,6 +122,7 @@ public class GirisPaneli extends JPanel {
                 try {
                     File f = c.getSelectedFile();
                     String yazi = new SimpleFileReader(f).asString();
+                    dersField.setText(f.getName());
                     yaziAlani.setColumns(30);
                     yaziAlani.setRows(5);
                     yaziAlani.setWrapStyleWord(true);
@@ -137,6 +143,7 @@ public class GirisPaneli extends JPanel {
 
     private JPanel hataPanel() {
         hataLbl = ComponentFactory.boldLabel("");
+        hataLbl.setForeground(Color.RED);
         JPanel jp = new JPanel(new MigLayout());
         jp.add(hataLbl, "grow");
         return jp;
@@ -190,5 +197,21 @@ public class GirisPaneli extends JPanel {
         dersBilgisi.hataGoster = durumGoster.isSelected();
         dersBilgisi.elGoster = elGoster.isSelected();
         return dersBilgisi;
+    }
+
+    public boolean validateform() {
+        if (!Strings.hasText(isim.getText())) {
+            hataLbl.setText("Ad-Soyad bilgisi eksik.");
+            return false;
+        }
+        if (!Strings.hasText(no.getText())) {
+            hataLbl.setText("Numara bilgisi eksik.");
+            return false;
+        }
+        if (!Strings.hasText(yaziAlani.getText())) {
+            hataLbl.setText("Ders bilgisi eksik.");
+            return false;
+        }
+        return true;
     }
 }

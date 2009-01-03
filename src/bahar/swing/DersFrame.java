@@ -10,7 +10,6 @@ import java.awt.*;
 public class DersFrame extends JDialog  {
 
     public DersFrame(DersBilgisi dersBilgisi, Klavye klavye) {
-        //super(owner);
         setLayout(new MigLayout());
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         this.setModal(true);
