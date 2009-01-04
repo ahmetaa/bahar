@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.List;
 
 import org.jmate.Strings;
+import org.bushe.swing.event.EventBus;
 import bahar.bilgi.DersBilgisi;
 import bahar.bilgi.DersOturumu;
 import bahar.bilgi.SatirDinleyici;
@@ -44,7 +45,9 @@ public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
     }
 
     public char beklenenHarf() {
-        return current().beklenenHarf();
+        if (!yaziSonunaGelindi())
+            return current().beklenenHarf();
+        return '\u0000';
     }
 
     private SatirPaneli current() {
@@ -52,7 +55,7 @@ public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
     }
 
     public void ozelKarakter(KeyEvent e) {
-        if (yaziSonunaErisildi)
+        if (yaziSonunaGelindi())
             return;
 
         if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE || e.getKeyChar() == '\b') {
@@ -62,25 +65,30 @@ public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
         e.consume();
     }
 
-    public boolean yaziSonunaErisildi() {
-        return yaziSonunaErisildi;
-    }
-
     public void karakterYaz(char c) {
-        if (yaziSonunaErisildi)
+        if (yaziSonunaGelindi())
             return;
         current().type(c);
     }
 
+    public boolean yaziSonunaGelindi() {
+        return currentLine >= satirlar.size() || current().satirBitti();
+    }
+
     public void satirSonu() {
+
         current().goInactive();
         current().eraseCursor();
-        currentLine++;
-        if (currentLine > satirlar.size()) {
+
+        // ders sonuna gelinmisse.
+        if (yaziSonunaGelindi()) {
             yaziSonunaErisildi = true;
-            return;
+            oturum.durakla();
+            EventBus.publish(new DersEvent(true));
+        } else {
+            currentLine++;
+            current().goActive();
         }
-        current().goActive();
     }
 
     public void hataYapildi(char hata, boolean hataYazildi) {
@@ -231,6 +239,10 @@ public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
                 }
             }
             return sb.append("_").toString();
+        }
+
+        public boolean satirBitti() {
+            return yazilan.length() == beklenenString.length();
         }
 
         public void eraseCursor() {

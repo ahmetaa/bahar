@@ -9,7 +9,7 @@ import bahar.bilgi.*;
 import org.bushe.swing.event.annotation.EventSubscriber;
 import org.bushe.swing.event.EventBus;
 
-public class AnaDersPaneli extends JPanel implements KeyListener, IcerikDinleyici {
+public class AnaDersPaneli extends JPanel implements KeyListener {
 
     DersBilgisi dersBilgisi;
     DurumPaneli durumPaneli;
@@ -49,52 +49,57 @@ public class AnaDersPaneli extends JPanel implements KeyListener, IcerikDinleyic
         if (dersBilgisi.hataGoster)
             this.add(elPaneli, "wrap");
 
-        this.add(statusLabel," align left");
+        this.add(statusLabel, " align left");
 
         this.setFocusable(true);
         this.addKeyListener(this);
 
-        EventBus.publish(new StatusEvent("Bir tus basinca oturum baslayacak. Duraklama icin ESC tusunu kullanin."));
+        EventBus.publish(new StatusEvent("Bir tusa basinca oturum baslayacak."));
     }
 
-
-    public static void main(String[] args) {
-        JFrame f = new JFrame();
-        f.setLayout(new MigLayout());
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.add(new AnaDersPaneli(DersBilgisi.ornek(), Klavyeler.amerikanQ()));
-        f.pack();
-        f.setVisible(true);
+    @EventSubscriber(eventClass = DersEvent.class)
+    public void onEvent(DersEvent event) {
+        if (event.dersSonlandi) {
+            EventBus.publish(new StatusEvent("Yazim oturumu sonlandi."));
+            
+        }
     }
 
     public void setParmakIsareti(char c) {
-        elPaneli.setParmakBilgisi(klavye.getPArmakBilgisi(c));
+        if (klavye.getPArmakBilgisi(c) != null)
+            elPaneli.setParmakBilgisi(klavye.getPArmakBilgisi(c));
     }
 
     public void keyTyped(KeyEvent e) {
         if (klavye.harfYazilabilir(e.getKeyChar())) {
+            // ders oturumu ilk legal tusa basma ile baslar.
             if (!basladi) {
                 basladi = true;
                 dersOturumu.devamEt();
+                EventBus.publish(new StatusEvent("Oturum basladi. Duraklama icin ESC tusunu kullanin."));
             }
+            // eger ders duramlamis ise
             if (durakladi) {
                 dersOturumu.devamEt();
                 durakladi = false;
             }
-            dersIcerikPaneli.karakterYaz(e.getKeyChar());
-            setParmakIsareti(dersIcerikPaneli.beklenenHarf());
+
+            // eger ders sonuna gelinmemis el resmini guncelle.
+            if (!dersIcerikPaneli.yaziSonunaGelindi()) {
+                dersIcerikPaneli.karakterYaz(e.getKeyChar());
+                setParmakIsareti(dersIcerikPaneli.beklenenHarf());
+            }
 
         } else {
             if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
                 if (!durakladi) {
-                    EventBus.publish(new StatusEvent("Oturum Durakladi.. ESC tusu ile devam edebilirsiniz."));
-                    System.out.println("Durakla..");
+                    EventBus.publish(new StatusEvent("Oturum Durakladi.. Tusa basarak devam edebilirsiniz."));
                     durakladi = true;
                     dersOturumu.durakla();
                 } else {
-                    System.out.println("Basla....");
                     dersOturumu.devamEt();
                     durakladi = false;
+                    EventBus.publish(new StatusEvent("Oturum devam ediyor. Duraklama icin ESC tusunu kullanin."));
                 }
             }
             dersIcerikPaneli.ozelKarakter(e);
@@ -110,19 +115,13 @@ public class AnaDersPaneli extends JPanel implements KeyListener, IcerikDinleyic
         // gerek yok
     }
 
-    public void dersBitti() {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public static void main(String[] args) {
+        JFrame f = new JFrame();
+        f.setLayout(new MigLayout());
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.add(new AnaDersPaneli(DersBilgisi.ornek(), Klavyeler.amerikanQ()));
+        f.pack();
+        f.setVisible(true);
     }
 
-    public void dersDurakladi() {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public void dersYenidenBasladi() {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public void dersBasladi() {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
 }
