@@ -3,10 +3,13 @@ package bahar.swing;
 import javax.swing.*;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 import net.miginfocom.swing.MigLayout;
 import bahar.bilgi.*;
 import org.bushe.swing.event.annotation.EventSubscriber;
+import org.bushe.swing.event.annotation.AnnotationProcessor;
 import org.bushe.swing.event.EventBus;
 
 public class AnaDersPaneli extends JPanel implements KeyListener {
@@ -23,6 +26,10 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
     boolean durakladi = false;
 
     public AnaDersPaneli(DersBilgisi dersBilgisi, Klavye klavye) {
+
+        // Eventbus mekanizmasina bu sinifi ekle.
+        AnnotationProcessor.process(this);
+
         this.dersBilgisi = dersBilgisi;
         this.klavye = klavye;
 
@@ -49,7 +56,7 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
         if (dersBilgisi.hataGoster)
             this.add(elPaneli, "wrap");
 
-        this.add(statusLabel, " align left");
+        this.add(statusLabel, "align left");
 
         this.setFocusable(true);
         this.addKeyListener(this);
@@ -59,15 +66,38 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
 
     @EventSubscriber(eventClass = DersEvent.class)
     public void onEvent(DersEvent event) {
-        if (event.dersSonlandi) {
-            EventBus.publish(new StatusEvent("Yazim oturumu sonlandi."));
+
+        if (event.dersSonucuKapandi) {
+
             
+        } else if (event.dersSonlandi) {
+            EventBus.publish(new StatusEvent("Yazim oturumu sonlandi."));
+            SonucDialog sonucDialog = new SonucDialog(dersOturumu, durumPaneli);
         }
+
     }
 
     public void setParmakIsareti(char c) {
         if (klavye.getPArmakBilgisi(c) != null)
             elPaneli.setParmakBilgisi(klavye.getPArmakBilgisi(c));
+    }
+
+    private class SonucDialog extends JDialog {
+
+        private SonucDialog(DersOturumu dersOturumu, DurumPaneli durumPaneli) {
+            this.setLayout(new MigLayout());
+            this.add(durumPaneli, "wrap");
+            JButton btnOk = new JButton("Basla");
+            btnOk.setFont(ComponentFactory.VERDANA);
+
+
+            btnOk.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    EventBus.publish(new DersEvent(true, true));
+                }
+            });
+            this.setModal(true);
+        }
     }
 
     public void keyTyped(KeyEvent e) {

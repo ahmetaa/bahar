@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import bahar.bilgi.Klavye;
 import bahar.bilgi.Klavyeler;
@@ -15,6 +16,7 @@ import bahar.bilgi.DersBilgisi;
 import org.jmate.Systems;
 import org.jmate.SimpleFileReader;
 import org.jmate.Strings;
+import org.jmate.IOs;
 
 public class GirisPaneli extends JPanel {
 
@@ -82,7 +84,7 @@ public class GirisPaneli extends JPanel {
 
         jp.add(checkBoxPanel(), "span 3");
 
-        JButton btnStart = new JButton("Basla");
+        JButton btnStart = new JButton("Teste Basla");
         btnStart.setFont(ComponentFactory.VERDANA);
 
 
@@ -96,7 +98,30 @@ public class GirisPaneli extends JPanel {
             }
         });
 
-        jp.add(btnStart,"span 3");
+        JButton btnTest = new JButton("Deneme Yap");
+        btnTest.setFont(ComponentFactory.VERDANA);
+
+
+        btnTest.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                InputStream is = GirisPaneli.class.getResourceAsStream("/ornekler/ornek.txt");
+               // InputStream is = IOs.getClassPathResourceAsStream("/ornekler/ornek.txt");
+                try {
+                    String icerik = IOs.readAsString(IOs.getReader(is));
+                    DersBilgisi db = new DersBilgisi(icerik.replaceAll("[\n]", " "));
+                    db.kullaniciAdi = "Test";
+                    db.kullaniciNumarasi = "--";
+                    new DersFrame(db, getKlavye());
+                    hataLbl.setText("");
+                    validate();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+
+        jp.add(btnStart);
+        jp.add(btnTest);
 
         return jp;
     }
