@@ -220,6 +220,12 @@ public class GirisPaneli extends JPanel {
             hataLbl.setText("Ad-Soyad bilgisi eksik.");
             return false;
         }
+
+        if(!isim.getText().matches("[a-zA-Z ]+")){
+            hataLbl.setText("Ad soyad sadece harflerden olusabilir.");
+            return false;
+        }
+
         if (!Strings.hasText(no.getText())) {
             hataLbl.setText("Numara bilgisi eksik.");
             return false;

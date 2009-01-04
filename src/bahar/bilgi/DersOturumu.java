@@ -1,9 +1,13 @@
 package bahar.bilgi;
 
+import org.jmate.SimpleFileWriter;
+import org.jmate.Strings;
+
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.io.IOException;
 
 public class DersOturumu {
 
@@ -12,6 +16,8 @@ public class DersOturumu {
     public int gorunenHataSayisi;
     public int toplamHataSayisi;
     public int yazilanKelimeSayisi;
+
+    private String yazilan;
 
     public DersBilgisi dersBilgisi;
 
@@ -23,6 +29,14 @@ public class DersOturumu {
     public void yazilanArttir() {
         yazilanHarfSayisi++;
         dinleyici.harfYazildi(yazilanHarfSayisi, gorunenHataSayisi, hizHesapla());
+    }
+
+    public String getYazilan() {
+        return yazilan;
+    }
+
+    public void setYazilan(String yazilan) {
+        this.yazilan = yazilan;
     }
 
     public String hizHesapla() {
@@ -70,6 +84,20 @@ public class DersOturumu {
 
     public int sure() {
         return zamanSaniye.get();
+    }
+
+    public void kaydet() throws IOException {
+        String fileName = Strings.eliminateWhiteSpaces(dersBilgisi.kullaniciAdi) + "_" + (System.currentTimeMillis() + ".txt");
+        SimpleFileWriter swf = new SimpleFileWriter.Builder(fileName).encoding("utf-8").keepOpen().build();
+        swf.writeLine("Ad:" + dersBilgisi.kullaniciAdi);
+        swf.writeLine("Numara:" + dersBilgisi.kullaniciNumarasi);
+        swf.writeLine("Beklenen Yazi:" + dersBilgisi.icerik);
+        swf.writeLine("Yazilan Yazi:" + yazilan);
+        swf.writeLine("Gorunen Hata Sayisi:" + gorunenHataSayisi);
+        swf.writeLine("Toplam Hata Sayisi:" + toplamHataSayisi);
+        swf.writeLine("Sure (sn):" + zamanSaniye);
+        swf.writeLine("Hiz (dakika/harf)" + hizHesapla());
+        swf.close();
     }
 
 }

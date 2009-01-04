@@ -5,6 +5,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 import net.miginfocom.swing.MigLayout;
 import bahar.bilgi.*;
@@ -45,8 +46,7 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
         if (dersBilgisi.durumGoster) {
             this.add(dersIcerikPaneli);
             this.add(durumPaneli, "wrap");
-        }
-        else
+        } else
             this.add(dersIcerikPaneli, "wrap");
 
         elPaneli = new ElPaneli();
@@ -75,6 +75,18 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
     public void setParmakIsareti(char c) {
         if (klavye.getPArmakBilgisi(c) != null)
             elPaneli.setParmakBilgisi(klavye.getPArmakBilgisi(c));
+    }
+
+    public void saveSession() {
+        dersOturumu.setYazilan(dersIcerikPaneli.yazilan);
+        try {
+            dersOturumu.kaydet();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Oturum kaydedilirken hata olustu! + " + e.getMessage(),
+                    "Beklenmeyen Hata..",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private class SonucDialog extends JDialog {
