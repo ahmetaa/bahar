@@ -108,10 +108,13 @@ public class GirisPaneli extends JPanel {
                 InputStream is = IOs.getClassPathResourceAsStream("/ornekler/ornek.txt");
                 try {
                     String icerik = IOs.readAsString(IOs.getReader(is, "utf-8"));
-                    DersBilgisi db = new DersBilgisi(icerik.replaceAll("[\n]", " "));
+                    // DersBilgisi db = new DersBilgisi(icerik.replaceAll("[\n]", " "));
+                    DersBilgisi db = new DersBilgisi("aaaaaa aaaaa aaaaa");
                     db.kullaniciAdi = "Test";
                     db.kullaniciNumarasi = "--";
+                    flagDegerleriniBelirle(db);
                     new DersFrame(db, getKlavye());
+
                     hataLbl.setText("");
                     validate();
                 } catch (IOException e1) {
@@ -182,25 +185,9 @@ public class GirisPaneli extends JPanel {
         jp.add(elGoster, "wrap");
 
         jp.add(ComponentFactory.label("Durum penceresi goster"));
-        durumGoster = new JCheckBox("", true);
+        durumGoster = new JCheckBox("", false);
         jp.add(durumGoster, "wrap");
         return jp;
-    }
-
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(
-                    UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            // fall back to default.
-        }
-
-        JFrame f = new JFrame();
-        f.setLayout(new MigLayout());
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.add(new GirisPaneli());
-        f.pack();
-        f.setVisible(true);
     }
 
     public Klavye getKlavye() {
@@ -219,9 +206,13 @@ public class GirisPaneli extends JPanel {
         DersBilgisi dersBilgisi = new DersBilgisi(yaziAlani.getText());
         dersBilgisi.kullaniciAdi = isim.getText().trim();
         dersBilgisi.kullaniciNumarasi = no.getText().trim();
-        dersBilgisi.hataGoster = durumGoster.isSelected();
-        dersBilgisi.elGoster = elGoster.isSelected();
+        flagDegerleriniBelirle(dersBilgisi);
         return dersBilgisi;
+    }
+
+    private void flagDegerleriniBelirle(DersBilgisi dersBilgisi) {
+        dersBilgisi.durumGoster = durumGoster.isSelected();
+        dersBilgisi.elGoster = elGoster.isSelected();
     }
 
     public boolean validateform() {
@@ -238,5 +229,22 @@ public class GirisPaneli extends JPanel {
             return false;
         }
         return true;
+    }
+
+    public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(
+                    UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            // fall back to default.
+        }
+
+        JFrame f = new JFrame();
+        f.setLayout(new MigLayout());
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setLocation(200,150);
+        f.add(new GirisPaneli());
+        f.pack();
+        f.setVisible(true);
     }
 }

@@ -42,18 +42,17 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
 
         dersIcerikPaneli = new DersIcerikPaneli(dersBilgisi, this.dersOturumu);
 
-        if (dersBilgisi.elGoster)
+        if (dersBilgisi.durumGoster) {
             this.add(dersIcerikPaneli);
+            this.add(durumPaneli, "wrap");
+        }
         else
             this.add(dersIcerikPaneli, "wrap");
-
-        if (dersBilgisi.elGoster)
-            this.add(durumPaneli, "wrap");
 
         elPaneli = new ElPaneli();
         setParmakIsareti(dersIcerikPaneli.beklenenHarf());
 
-        if (dersBilgisi.hataGoster)
+        if (dersBilgisi.elGoster)
             this.add(elPaneli, "wrap");
 
         this.add(statusLabel, "align left");
@@ -66,13 +65,9 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
 
     @EventSubscriber(eventClass = DersEvent.class)
     public void onEvent(DersEvent event) {
-
-        if (event.dersSonucuKapandi) {
-
-            
-        } else if (event.dersSonlandi) {
+        if (event.dersSonlandi) {
             EventBus.publish(new StatusEvent("Yazim oturumu sonlandi."));
-            SonucDialog sonucDialog = new SonucDialog(dersOturumu, durumPaneli);
+            new SonucDialog(dersOturumu);
         }
 
     }
@@ -84,20 +79,32 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
 
     private class SonucDialog extends JDialog {
 
-        private SonucDialog(DersOturumu dersOturumu, DurumPaneli durumPaneli) {
+        private SonucDialog(DersOturumu oturum) {
+
+            DurumPaneli durumPaneli = new DurumPaneli(oturum);
+
             this.setLayout(new MigLayout());
+
             this.add(durumPaneli, "wrap");
-            JButton btnOk = new JButton("Basla");
+            JButton btnOk = new JButton("Tamam");
             btnOk.setFont(ComponentFactory.VERDANA);
 
+            final SonucDialog blah = this;
 
             btnOk.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    EventBus.publish(new DersEvent(true, true));
+                    blah.dispose();
+                    EventBus.publish(new DersEvent(false, true));
                 }
             });
+            this.add(btnOk);
             this.setModal(true);
+            this.setLocation(400, 200);
+            pack();
+            setVisible(true);
         }
+
+
     }
 
     public void keyTyped(KeyEvent e) {

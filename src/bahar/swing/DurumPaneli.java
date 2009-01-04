@@ -2,6 +2,7 @@ package bahar.swing;
 
 import bahar.bilgi.DersBilgisi;
 import bahar.bilgi.OturumDinleyici;
+import bahar.bilgi.DersOturumu;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -16,7 +17,7 @@ public class DurumPaneli extends JPanel implements OturumDinleyici {
 
     public DurumPaneli(DersBilgisi dersBilgisi) {
 
-       // this.setBackground(Color.white);
+        // this.setBackground(Color.white);
         this.setLayout(new MigLayout("wrap 2"));
 
         // ad
@@ -48,6 +49,14 @@ public class DurumPaneli extends JPanel implements OturumDinleyici {
         hizLbl = ComponentFactory.fixedLengthLabel("--", 16);
         this.add(hizLbl);
 
+    }
+
+    public DurumPaneli(DersOturumu oturum) {
+        this(oturum.dersBilgisi);
+        this.sureLbl.setText(sureFormatla(oturum.sure()));
+        this.yazilanSayisiLbl.setText(String.valueOf(oturum.yazilanHarfSayisi));
+        this.hataSayisiLbl.setText(String.valueOf(oturum.gorunenHataSayisi));
+        this.hizLbl.setText(oturum.hizHesapla());
     }
 
     public void saniyeArtti(int sn, String hiz) {

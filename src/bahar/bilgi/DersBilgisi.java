@@ -18,7 +18,7 @@ public class DersBilgisi {
     public int harfSayisi;
     public Klavye klavye;
     public boolean silmeyeIzinVer=false;
-    public boolean hataGoster=true;
+    public boolean durumGoster =true;
     public boolean elGoster=true;
 
 
