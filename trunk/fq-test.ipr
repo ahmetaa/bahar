@@ -38,7 +38,7 @@
       <entry name="?*.jpg" />
       <entry name="?*.html" />
       <entry name="?*.dtd" />
-      <entry name="?*.tld" />
+      <entry name="?*.tld,?*.txt" />
     </wildcardResourcePatterns>
   </component>
   <component name="DependenciesAnalyzeManager">
