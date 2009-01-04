@@ -104,10 +104,10 @@ public class GirisPaneli extends JPanel {
 
         btnTest.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                InputStream is = GirisPaneli.class.getResourceAsStream("/ornekler/ornek.txt");
-               // InputStream is = IOs.getClassPathResourceAsStream("/ornekler/ornek.txt");
+                //InputStream is = GirisPaneli.class.getResourceAsStream("/ornekler/ornek.txt");
+                InputStream is = IOs.getClassPathResourceAsStream("/ornekler/ornek.txt");
                 try {
-                    String icerik = IOs.readAsString(IOs.getReader(is));
+                    String icerik = IOs.readAsString(IOs.getReader(is, "utf-8"));
                     DersBilgisi db = new DersBilgisi(icerik.replaceAll("[\n]", " "));
                     db.kullaniciAdi = "Test";
                     db.kullaniciNumarasi = "--";
