@@ -25,6 +25,7 @@ public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
     final DersOturumu oturum;
 
     boolean yaziSonunaErisildi = false;
+    String yazilan ="";
 
     public DersIcerikPaneli(DersBilgisi db, DersOturumu oturum) {
 
@@ -84,6 +85,10 @@ public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
         if (yaziSonunaGelindi()) {
             yaziSonunaErisildi = true;
             oturum.durakla();
+            for (SatirPaneli satirPaneli : satirlar) {
+               yazilan+=satirPaneli.yazilan;
+            }
+            yazilan = yazilan.trim();
             EventBus.publish(new DersEvent(true));
         } else {
             currentLine++;

@@ -14,6 +14,8 @@ import org.bushe.swing.event.EventBus;
 
 public class DersFrame extends JDialog {
 
+    AnaDersPaneli anaDersPaneli;
+
     public DersFrame(DersBilgisi dersBilgisi, Klavye klavye) {
 
         // Eventbus mekanizmasina bu sinifi ekle.
@@ -23,7 +25,8 @@ public class DersFrame extends JDialog {
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         this.setModal(true);
         this.setLocation(200, 150);
-        add(new AnaDersPaneli(dersBilgisi, klavye), "shrink");
+        anaDersPaneli = new AnaDersPaneli(dersBilgisi, klavye);
+        add(anaDersPaneli, "shrink");
         pack();
         setVisible(true);
     }
@@ -35,6 +38,7 @@ public class DersFrame extends JDialog {
     @EventSubscriber(eventClass = DersEvent.class)
     public void onEvent(DersEvent event) {
         if (event.dersSonucuKapandi) {
+            anaDersPaneli.saveSession();
             this.dispose();
         }
     }
