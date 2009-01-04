@@ -97,7 +97,7 @@ public class DersOturumu {
         swf.writeLine("Gorunen Hata Sayisi:" + gorunenHataSayisi);
         swf.writeLine("Toplam Hata Sayisi:" + toplamHataSayisi);
         swf.writeLine("Sure (sn):" + zamanSaniye);
-        swf.writeLine("Hiz (dakika/harf)" + hizHesapla());
+        swf.writeLine("Hiz (dakika/harf):" + hizHesapla());
         swf.close();
     }
 

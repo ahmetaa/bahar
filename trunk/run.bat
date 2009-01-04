@@ -1,1 +1,1 @@
-java -classpath ".;EventBus-1.3beta.jar;jmate-0.4.jar;miglayout-3.6.2-swing.jar;bahar-0.2.jar" bahar.swing.GirisPaneli
+java -classpath ".;EventBus-1.3beta.jar;jmate-0.4.jar;miglayout-3.6.2-swing.jar;bahar-0.3.1.jar" bahar.swing.GirisPaneli
