@@ -2,7 +2,7 @@
 
 <project name="bahar" default="dagitim" basedir=".">
 
-    <property name="ad-surum" value="bahar-0.1"/>
+    <property name="ad-surum" value="bahar-0.2"/>
 
     <!-- derleme icin gerekli kutuphanelerin dizinini belirt.-->
     <path id="classpath.build">
@@ -33,7 +33,9 @@
             <fileset dir="src">
                 <exclude name="**/*.java"/>
             </fileset>
+            <fileset dir="kaynaklar"/>
         </copy>
+
     </target>
 
     <!-- derleme sonucunda olusan class dosyalarini paketleyip jar dosyasina donusturur -->
@@ -56,10 +58,12 @@
             <fileset file="run.bat"/>
         </copy>
         <!-- bilgi dizinini kopyala -->
+<!--
         <mkdir dir="dagitim/kaynaklar"/>
         <copy todir="dagitim/kaynaklar">
             <fileset dir="kaynaklar"/>
         </copy>
+-->
         <!-- unix-linux ozel-->
         <chmod dir="dagitim" perm="777"/>
         <chmod file="dagitim/start.sh" perm="ugo+rx"/>

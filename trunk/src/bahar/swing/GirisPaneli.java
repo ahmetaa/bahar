@@ -108,8 +108,8 @@ public class GirisPaneli extends JPanel {
                 InputStream is = IOs.getClassPathResourceAsStream("/ornekler/ornek.txt");
                 try {
                     String icerik = IOs.readAsString(IOs.getReader(is, "utf-8"));
-                    // DersBilgisi db = new DersBilgisi(icerik.replaceAll("[\n]", " "));
-                    DersBilgisi db = new DersBilgisi("aaaaaa aaaaa aaaaa");
+                    DersBilgisi db = new DersBilgisi(icerik.replaceAll("[\n]", " "));
+                    //DersBilgisi db = new DersBilgisi("aaaaaa aaaaa aaaaa");
                     db.kullaniciAdi = "Test";
                     db.kullaniciNumarasi = "--";
                     flagDegerleriniBelirle(db);
