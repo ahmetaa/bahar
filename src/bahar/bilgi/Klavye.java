@@ -10,6 +10,7 @@ import java.util.Set;
  */
 public class Klavye {
 
+    String ad;
     String shiftKarakterleri;
     String normalKarakterler;
     String altGrKarakterleri;
@@ -17,10 +18,12 @@ public class Klavye {
     private String tumKArakterler;
 
     public Klavye(
+            String ad,
             String shiftKarakterleri,
             String normalKarakterler,
             String altGrKarakterleri,
             Map<Character, ParmakBilgisi> parmakTablosu) {
+        this.ad = ad;
         this.shiftKarakterleri = shiftKarakterleri;
         this.normalKarakterler = normalKarakterler;
         this.altGrKarakterleri = altGrKarakterleri;
@@ -34,6 +37,14 @@ public class Klavye {
 
     public boolean harfYazilabilir(char c) {
         return tumKArakterler.indexOf(c) > 0;
+    }
+
+    public boolean yaziYazilabilir(String s) {
+        for(char c : s.toCharArray()) {
+            if(!harfYazilabilir(c))
+                return false;
+        }
+        return true;
     }
 }
 
