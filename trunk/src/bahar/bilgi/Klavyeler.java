@@ -20,30 +20,45 @@ public class Klavyeler {
         String altGr = "";
         String[] solElDagilimi = {" ", "5rfv6tgb$RFV%TGB", "4edc$EDC", "3wsx#WSX", "`12qaz!@QAZ~"};
         String[] sagElDagilimi = {"", "7yhn8ujm&YHN*UJM", "9ik,(IK<", "0ol.)OL>", "-=p[]'/_+P{}:\"?"};
-        return uret(shift, normal, altGr, sagElDagilimi, solElDagilimi);
+        return uret("Amerikan Q", shift, normal, altGr, sagElDagilimi, solElDagilimi);
     }
 
+
     public static Klavye turkceQ() {
-        String shift = "é!'^+%&/()=?_QWERTYUIOP\u011e\u00dcASDFGHJKL\u015e\u0130;>ZXCVBNM\u00d6\u00c7:";
-        String normal = "\"1234567890*-qwertyu\u0131op\u011f\u00dcasdfghjkl\u015fi,<zxcvbnm\u00f6\u00e7. ";
+        String shift = "é!'^+%&/()=?_QWERTYUIOP\u011e\u00dcASDFGHJKL\u015e\u0130>ZXCVBNM\u00d6\u00c7:;";
+        String normal = "*1234567890/-qwertyu\u0131op\u011f\u00dcasdfghjkl\u015fi<zxcvbnm\u00f6\u00e7., ";
         // TODO: FIX BELOW.
         String altGr = "";
-        String[] sagElDagilimi = {" ", "5rfv6tgb$RFV%TGB", "4edc$EDC", "3wsx#WSX", "`12qaz!@QAZ~"};
-        String[] solElDagilimi = {"", "7yhn8ujm&YHN*UJM", "9ik,(IK<", "0ol.)OL>", "-=p[]'/_+P{}:\"?"};
-        return uret(shift, normal, altGr, sagElDagilimi, solElDagilimi);
+        String[] solElDagilimi = {" ", "5rfv6tgb$RFV%TGB", "4edc$EDC", "3^gGi", "*+1!2\"fFuU<>jJ"};
+        String[] sagElDagilimi = {"", "7yhn8ujm&YHN*UJM", "9ik,(IK<", "0ol.)OL>", "-=p[]'/_+P{}:\"?"};
+        return uret("Turkce Q", shift, normal, altGr, sagElDagilimi, solElDagilimi);
     }
+    
+    // Turkce ozel
+    public static final char CHAR_CC = '\u00c7'; // Kuyruklu buyuk c (ch)
+    public static final char CHAR_cc = '\u00e7'; // Kuyruklu kucuk c (ch)
+    public static final char CHAR_GG = '\u011e'; // Buyuk yumusak g
+    public static final char CHAR_gg = '\u011f'; // Kucuk yumusak g
+    public static final char CHAR_ii = '\u0131'; // Noktassiz kucuk i
+    public static final char CHAR_II = '\u0130'; // Noktali buyuk i
+    public static final char CHAR_OO = '\u00d6'; // Noktali buyuk o
+    public static final char CHAR_oo = '\u00f6'; // Noktali kucuk o
+    public static final char CHAR_SS = '\u015e'; // Kuyruklu buyuk s (sh)
+    public static final char CHAR_ss = '\u015f'; // Kuyruklu kucuk s (sh)
+    public static final char CHAR_UU = '\u00dc'; // Noktali buyuk u
+    public static final char CHAR_uu = '\u00fc'; // Noktali kucuk u
 
     public static Klavye turkceF() {
         // TODO: HENUZ TANIMLANMADI.
-        String shift = "é!'^+%&/()=?_QWERTYUIOP\u011e\u00dcASDFGHJKL\u015e\u0130;>ZXCVBNM\u00d6\u00c7:";
+        String shift = "+!\"^$%&'()=?-QWERTYUIOP\u011e\u00dcASDFGHJKL\u015e\u0130>ZXCVBNM\u00d6\u00c7:;";
         String normal = "\"1234567890*-qwertyu\u0131op\u011f\u00dcasdfghjkl\u015fi,<zxcvbnm\u00f6\u00e7. ";
         String altGr = "";
-        String[] sagElDagilimi = {" ", "5rfv6tgb$RFV%TGB", "4edc$EDC", "3wsx#WSX", "`12qaz!@QAZ~"};
-        String[] solElDagilimi = {"", "7yhn8ujm&YHN*UJM", "9ik,(IK<", "0ol.)OL>", "-=p[]'/_+P{}:\"?"};
-        return uret(shift, normal, altGr, sagElDagilimi, solElDagilimi);
+        String[] sagElDagilimi = {" ", "5%\u0131IaAcC6&oO\u00dc\u00fc\u00e7\u00c7", "4$\u011f\u011eeEvV", "3^gGi\u0130\u00f6\u00d6", "*+1!2\"fFuU<>jJ"};
+        String[] solElDagilimi = {"", "7'dDtTzZ8(rRkKsS", "9)nNmMbB", "0=hHlL.:", "/?-_pPqQwWyY\u015e\u015fxX,;"};
+        return uret("Turkce F", shift, normal, altGr, sagElDagilimi, solElDagilimi);
     }
 
-    private static Klavye uret(String shift, String normal, String altGr, String[] sagEl, String[] solEl) {
+    private static Klavye uret(String ad, String shift, String normal, String altGr, String[] sagEl, String[] solEl) {
         Map<Character, ParmakBilgisi> parmakBilgiTablosu = Collects.newHashMap();
 
         //TODO: kod tekrari yapma.
@@ -66,7 +81,7 @@ public class Klavyeler {
             }
         }
 
-        return new Klavye(shift, normal, altGr, parmakBilgiTablosu);
+        return new Klavye(ad, shift, normal, altGr, parmakBilgiTablosu);
     }
 
 

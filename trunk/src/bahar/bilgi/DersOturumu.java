@@ -91,6 +91,7 @@ public class DersOturumu {
         SimpleFileWriter swf = new SimpleFileWriter.Builder(fileName).encoding("utf-8").keepOpen().build();
         swf.writeLine("Ad:" + dersBilgisi.kullaniciAdi);
         swf.writeLine("Numara:" + dersBilgisi.kullaniciNumarasi);
+        swf.writeLine("Klavye:" + dersBilgisi.klavye.ad);
         swf.writeLine("Beklenen Yazi:" + dersBilgisi.icerik);
         swf.writeLine("Yazilan Yazi:" + yazilan);
         swf.writeLine("Gorunen Hata Sayisi:" + gorunenHataSayisi);

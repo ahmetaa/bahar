@@ -209,8 +209,8 @@ public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
                 list.add(new TextLayoutInfo(cnt, false));
                 return list;
             }
-            System.out.println(Arrays.toString(splitz));
-            System.out.println(bicimliYazilan);
+            //System.out.println(Arrays.toString(splitz));
+            //System.out.println(bicimliYazilan);
             int i = 0;
             for (String s : splitz) {
 
