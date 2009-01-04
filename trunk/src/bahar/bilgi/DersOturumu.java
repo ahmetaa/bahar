@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DersOturumu {
 
-    public final AtomicInteger zamanSaniye = new AtomicInteger(0);
+    private final AtomicInteger zamanSaniye = new AtomicInteger(0);
     public int yazilanHarfSayisi;
     public int gorunenHataSayisi;
     public int toplamHataSayisi;
@@ -66,6 +66,10 @@ public class DersOturumu {
 
     public void devamEt() {
         running.set(true);
+    }
+
+    public int sure() {
+        return zamanSaniye.get();
     }
 
 }
