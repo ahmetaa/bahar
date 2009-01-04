@@ -16,7 +16,7 @@ public class DersFrame extends JDialog {
 
     AnaDersPaneli anaDersPaneli;
 
-    public DersFrame(DersBilgisi dersBilgisi, Klavye klavye) {
+    public DersFrame(DersBilgisi dersBilgisi) {
 
         // Eventbus mekanizmasina bu sinifi ekle.
         AnnotationProcessor.process(this);
@@ -25,14 +25,14 @@ public class DersFrame extends JDialog {
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         this.setModal(true);
         this.setLocation(200, 150);
-        anaDersPaneli = new AnaDersPaneli(dersBilgisi, klavye);
+        anaDersPaneli = new AnaDersPaneli(dersBilgisi);
         add(anaDersPaneli, "shrink");
         pack();
         setVisible(true);
     }
 
     public static void main(String[] args) {
-        new DersFrame(DersBilgisi.ornek(), Klavyeler.amerikanQ());
+        new DersFrame(DersBilgisi.ornek());
     }
 
     @EventSubscriber(eventClass = DersEvent.class)

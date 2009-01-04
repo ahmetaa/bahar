@@ -26,12 +26,13 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
     boolean basladi = false;
     boolean durakladi = false;
 
-    public AnaDersPaneli(DersBilgisi dersBilgisi, Klavye klavye) {
+    public AnaDersPaneli(DersBilgisi dersBilgisi) {
 
         // Eventbus mekanizmasina bu sinifi ekle.
         AnnotationProcessor.process(this);
 
         this.dersBilgisi = dersBilgisi;
+        this.klavye = dersBilgisi.klavye;
         this.klavye = klavye;
 
         MigLayout ml = new MigLayout("", "[center][center]", "[center][center]");
@@ -168,7 +169,7 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
         JFrame f = new JFrame();
         f.setLayout(new MigLayout());
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.add(new AnaDersPaneli(DersBilgisi.ornek(), Klavyeler.amerikanQ()));
+        f.add(new AnaDersPaneli(DersBilgisi.ornek()));
         f.pack();
         f.setVisible(true);
     }

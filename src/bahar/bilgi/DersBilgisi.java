@@ -46,6 +46,7 @@ public class DersBilgisi {
         dersBilgisi.kullaniciAdi = "Ahmet A. Akin";
         dersBilgisi.kullaniciNumarasi = "12345";
         dersBilgisi.kullaniciSinifi = "4-B";
+        dersBilgisi.klavye = Klavyeler.turkceF();
         return dersBilgisi;
     }
 

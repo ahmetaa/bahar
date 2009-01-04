@@ -91,7 +91,7 @@ public class GirisPaneli extends JPanel {
         btnStart.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (validateform()) {
-                    new DersFrame(dersBilgisiUret(), getKlavye());
+                    new DersFrame(dersBilgisiUret());
                     hataLbl.setText("");
                     validate();
                 }
@@ -108,12 +108,13 @@ public class GirisPaneli extends JPanel {
                 InputStream is = IOs.getClassPathResourceAsStream("/ornekler/ornek.txt");
                 try {
                     String icerik = IOs.readAsString(IOs.getReader(is, "utf-8"));
-                    DersBilgisi db = new DersBilgisi(icerik.replaceAll("[\n]", " "));
-                    //DersBilgisi db = new DersBilgisi("aaaaaa aaaaa aaaaa");
+                  //  DersBilgisi db = new DersBilgisi(icerik.replaceAll("[\n]", " "));
+                    DersBilgisi db = new DersBilgisi("aaaaaa aaaaa aaaaa aaaaa aaaaa aaaa aaaaaaa aaaaaa aaaaaa aaaaa aaaaaa");
                     db.kullaniciAdi = "Test";
                     db.kullaniciNumarasi = "--";
                     flagDegerleriniBelirle(db);
-                    new DersFrame(db, getKlavye());
+                    db.klavye = getKlavye();
+                    new DersFrame(db);
 
                     hataLbl.setText("");
                     validate();
@@ -150,6 +151,8 @@ public class GirisPaneli extends JPanel {
                 try {
                     File f = c.getSelectedFile();
                     String yazi = new SimpleFileReader(f).asString();
+                    yazi = Strings.whiteSpacesToSingleSpace(yazi.trim());
+
                     dersField.setText(f.getName());
                     yaziAlani.setColumns(30);
                     yaziAlani.setRows(5);
@@ -206,6 +209,7 @@ public class GirisPaneli extends JPanel {
         DersBilgisi dersBilgisi = new DersBilgisi(yaziAlani.getText());
         dersBilgisi.kullaniciAdi = isim.getText().trim();
         dersBilgisi.kullaniciNumarasi = no.getText().trim();
+        dersBilgisi.klavye = getKlavye();
         flagDegerleriniBelirle(dersBilgisi);
         return dersBilgisi;
     }
