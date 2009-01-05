@@ -53,7 +53,7 @@ public class Klavyeler {
 
     public static Klavye turkceF() {
         String shift = "+!\"^$%&'()=?_QWERTYUIOP\u011e\u00dcASDFGHJKL\u015e\u0130>ZXCVBNM\u00d6\u00c7:;";
-        String normal = "*1234567890/-qwertyu\u0131op\u011f\u00fcasdfghjkl\u015fi<zxcvbnm\u00f6\u00e7.,";
+        String normal = " *1234567890/-qwertyu\u0131op\u011f\u00fcasdfghjkl\u015fi<zxcvbnm\u00f6\u00e7.,";
         String altGr = "";
         String[] solElDagilimi = {" ", "5%\u0131IaAcC6&oO\u00dc\u00fc\u00e7\u00c7", "4$\u011f\u011eeEvV", "3^gGi\u0130\u00f6\u00d6", "*+1!2\"fFuU<>jJ"};
         String[] sagElDagilimi = {"", "7'dDtTzZ8(rRkKsS", "9)nNmMbB", "0=hHlL.:", "/?-_pPqQwWyY\u015e\u015fxX,;"};
