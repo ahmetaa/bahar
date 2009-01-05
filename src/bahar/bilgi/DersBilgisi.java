@@ -17,14 +17,20 @@ public class DersBilgisi {
     public String icerik;
     public int harfSayisi;
     public Klavye klavye;
-    public boolean silmeyeIzinVer=false;
-    public boolean durumGoster =true;
-    public boolean elGoster=true;
-
+    public boolean silmeyeIzinVer = false;
+    public boolean durumGoster = true;
+    public boolean elGoster = true;
 
     public DersBilgisi(String content) {
-        this.icerik = content;
-        this.harfSayisi = content.length();
+        this.icerik = Strings.whiteSpacesToSingleSpace(content).trim();
+        this.harfSayisi = icerik.length();
+    }
+
+    public int kelimeSayisi() {
+        if (!Strings.hasText(icerik)) {
+            return 0;
+        }
+        return icerik.split("[ ]").length;
     }
 
 

@@ -15,7 +15,6 @@ public class DersOturumu {
     public int yazilanHarfSayisi;
     public int gorunenHataSayisi;
     public int toplamHataSayisi;
-    public int yazilanKelimeSayisi;
 
     private String yazilan;
 
@@ -28,7 +27,7 @@ public class DersOturumu {
 
     public void yazilanArttir() {
         yazilanHarfSayisi++;
-        dinleyici.harfYazildi(yazilanHarfSayisi, gorunenHataSayisi, hizHesapla());
+        dinleyici.harfYazildi(yazilanHarfSayisi, gorunenHataSayisi, harfHizHasapla());
     }
 
     public String getYazilan() {
@@ -39,8 +38,8 @@ public class DersOturumu {
         this.yazilan = yazilan;
     }
 
-    public String hizHesapla() {
-        if (zamanSaniye.get() > 5) {
+    public String harfHizHasapla() {
+        if (zamanSaniye.get() > 3) {
             float f = (60 * yazilanHarfSayisi / (float) zamanSaniye.get());
             return String.format("%.1f", f);
         } else return "--";
@@ -48,7 +47,7 @@ public class DersOturumu {
 
     public void gorunenHataArttir() {
         gorunenHataSayisi++;
-        dinleyici.harfYazildi(yazilanHarfSayisi, gorunenHataSayisi, hizHesapla());
+        dinleyici.harfYazildi(yazilanHarfSayisi, gorunenHataSayisi, harfHizHasapla());
     }
 
     public void tumHataArttir() {
@@ -67,7 +66,7 @@ public class DersOturumu {
             public void run() {
                 if (running.get()) {
                     zamanSaniye.incrementAndGet();
-                    dinleyici.saniyeArtti(zamanSaniye.get(), hizHesapla());
+                    dinleyici.saniyeArtti(zamanSaniye.get(), harfHizHasapla());
                 }
             }
         };
@@ -86,6 +85,12 @@ public class DersOturumu {
         return zamanSaniye.get();
     }
 
+    public int yazilanKelimeSayisi() {
+        if (!Strings.hasText(yazilan))
+            return 0;
+        else return Strings.whiteSpacesToSingleSpace(yazilan).split("[ ]").length;
+    }
+
     public void kaydet() throws IOException {
         String fileName = Strings.eliminateWhiteSpaces(dersBilgisi.kullaniciAdi) + "_" + (System.currentTimeMillis() + ".txt");
         SimpleFileWriter swf = new SimpleFileWriter.Builder(fileName).encoding("utf-8").keepOpen().build();
@@ -93,12 +98,25 @@ public class DersOturumu {
         swf.writeLine("Numara:" + dersBilgisi.kullaniciNumarasi);
         swf.writeLine("Klavye:" + dersBilgisi.klavye.ad);
         swf.writeLine("Beklenen Yazi:" + dersBilgisi.icerik);
-        swf.writeLine("Yazilan Yazi:" + yazilan);
+        swf.writeLine("Yazilan Yazi :" + yazilan);
+        swf.writeLine("Toplam harf sayisi:" + dersBilgisi.icerik.length());
+        swf.writeLine("Kelime sayisi:" + dersBilgisi.kelimeSayisi());
+        swf.writeLine("Yazilan harf sayisi:" + yazilan.length());
+        swf.writeLine("Yazilan kelime sayisi:" + yazilanKelimeSayisi());
         swf.writeLine("Gorunen Hata Sayisi:" + gorunenHataSayisi);
         swf.writeLine("Toplam Hata Sayisi:" + toplamHataSayisi);
         swf.writeLine("Sure (sn):" + zamanSaniye);
-        swf.writeLine("Hiz (dakika/harf):" + hizHesapla());
+        swf.writeLine("Hiz (dakika/kelime):" + kelimeHizHesapla());
+        swf.writeLine("Hiz (dakika/harf):" + harfHizHasapla());
+//        swf.writeLine("Dogru yazim orani (gorunen hatalara):" +  )
+//        swf.writeLine("Dogru yazim orani (tum hatalara):" +  )
         swf.close();
     }
+
+    private String kelimeHizHesapla() {
+        float f = (60 * yazilanKelimeSayisi() / (float) zamanSaniye.get());
+        return String.format("%.1f", f);
+    }
+
 
 }

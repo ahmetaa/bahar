@@ -6,7 +6,6 @@ import bahar.bilgi.DersOturumu;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class DurumPaneli extends JPanel implements OturumDinleyici {
 
@@ -56,7 +55,7 @@ public class DurumPaneli extends JPanel implements OturumDinleyici {
         this.sureLbl.setText(sureFormatla(oturum.sure()));
         this.yazilanSayisiLbl.setText(String.valueOf(oturum.yazilanHarfSayisi));
         this.hataSayisiLbl.setText(String.valueOf(oturum.gorunenHataSayisi));
-        this.hizLbl.setText(oturum.hizHesapla());
+        this.hizLbl.setText(oturum.harfHizHasapla());
     }
 
     public void saniyeArtti(int sn, String hiz) {
