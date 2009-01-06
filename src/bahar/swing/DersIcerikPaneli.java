@@ -178,7 +178,7 @@ public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
 
             if (ke != expectedChr) {
                 satirDinleyici.hataYapildi(ke, true);
-                bicimliYazilan += '#';
+                bicimliYazilan += '\u0123';
                 lastWasError = true;
             } else {
                 lastWasError = false;
@@ -204,32 +204,23 @@ public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
          */
         java.util.List<TextLayoutInfo> splitText(String cnt) {
             java.util.List<TextLayoutInfo> list = new ArrayList<TextLayoutInfo>();
-            String[] splitz = cnt.split("#");
-            if (splitz.length == 1) {
+            String[] splitz = cnt.split("\u0123");
+            System.out.println(Arrays.toString(splitz));
+            System.out.println(bicimliYazilan);
+            if (splitz.length < 2) {
                 list.add(new TextLayoutInfo(cnt, false));
                 return list;
             }
-            //System.out.println(Arrays.toString(splitz));
-            //System.out.println(bicimliYazilan);
-            int i = 0;
-            for (String s : splitz) {
-
-                if (s.length() > 0 && i == 0) {
-                    i++;
-                    list.add(new TextLayoutInfo(s, false));
-                    continue;
-                }
-
-                if (s.length() > 0) {
-                    String wrong = s.substring(0, 1);
-                    if (wrong.equals(" "))
-                        wrong = "\u25a1"; // bosluk yerine yanlis ise bos kare koy.
-                    list.add(new TextLayoutInfo(wrong, true));
-                }
-                if (s.length() > 1) {
-                    String correct = s.substring(1, s.length());
-                    list.add(new TextLayoutInfo(correct, false));
-                }
+            if (splitz[0].length() > 0)
+                list.add(new TextLayoutInfo(splitz[0], false));
+            for (int i = 1; i < splitz.length; i++) {
+                String s = splitz[i];
+                String wrong = s.substring(0, 1);
+                if (wrong.equals(" "))
+                    wrong = "\u25a1"; // bosluk yerine yanlis ise bos kare koy.
+                list.add(new TextLayoutInfo(wrong, true));
+                String correct = s.substring(1, s.length());
+                list.add(new TextLayoutInfo(correct, false));
             }
             return list;
         }
@@ -243,6 +234,7 @@ public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
                     sb.append(textLayoutInfo.s);
                 }
             }
+            System.out.println(sb);
             return sb.append("_").toString();
         }
 
