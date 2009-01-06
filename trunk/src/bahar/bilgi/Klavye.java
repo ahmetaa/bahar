@@ -3,7 +3,6 @@ package bahar.bilgi;
 import org.jmate.Collects;
 
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Klavye tus yerlesimi, parmak-tus bilgilerini icerir.
@@ -40,9 +39,8 @@ public class Klavye {
     }
 
     public boolean yaziYazilabilir(String s) {
-        for(char c : s.toCharArray()) {
-            if(!harfYazilabilir(c))
-            {
+        for (char c : s.toCharArray()) {
+            if (!harfYazilabilir(c)) {
                 System.out.println("c = " + c);
                 return false;
             }

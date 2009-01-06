@@ -1,15 +1,15 @@
 package bahar.bilgi;
 
+import org.jmate.Chars;
 import org.jmate.SimpleFileWriter;
 import org.jmate.Strings;
-import org.jmate.Chars;
 
+import java.io.IOException;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Locale;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class DersOturumu {
 
@@ -63,6 +63,7 @@ public class DersOturumu {
     }
 
     Timer timer = new Timer("MyTimer");
+
     public void initialize() {
 
         TimerTask timerTask = new TimerTask() {
@@ -102,7 +103,7 @@ public class DersOturumu {
     public static final char CHAR_ss = '\u015f'; // Kuyruklu kucuk s (sh)
     public static final char CHAR_uu = '\u00fc'; // Noktali kucuk u
 
-    
+
     public void stopTimer() {
         timer.cancel();
     }
@@ -111,23 +112,23 @@ public class DersOturumu {
 
         String kullaniciAdi = dersBilgisi.kullaniciAdi.toLowerCase(new Locale("tr"));
         StringBuilder sb = new StringBuilder();
-        for(char c : kullaniciAdi.toCharArray()) {
-            if(c==CHAR_cc)
-              sb.append('c');
-            else if (c==CHAR_gg)
-              sb.append('g');
-            else if(c==CHAR_ii)
-              sb.append('i');
-            else if(c==CHAR_oo)
-              sb.append('o');
-            else if(c==CHAR_ss)
-              sb.append('s');
-            else if(c==CHAR_uu)
-             sb.append('u');
-            else if(Chars.isAsciiAlphanumeric(c))
-              sb.append(c);
+        for (char c : kullaniciAdi.toCharArray()) {
+            if (c == CHAR_cc)
+                sb.append('c');
+            else if (c == CHAR_gg)
+                sb.append('g');
+            else if (c == CHAR_ii)
+                sb.append('i');
+            else if (c == CHAR_oo)
+                sb.append('o');
+            else if (c == CHAR_ss)
+                sb.append('s');
+            else if (c == CHAR_uu)
+                sb.append('u');
+            else if (Chars.isAsciiAlphanumeric(c))
+                sb.append(c);
         }
-        String fileName = Strings.eliminateWhiteSpaces(sb.toString().replaceAll("[ ]+","-")) + "_" + (System.currentTimeMillis() + ".txt");
+        String fileName = Strings.eliminateWhiteSpaces(sb.toString().replaceAll("[ ]+", "-")) + "_" + (System.currentTimeMillis() + ".txt");
         SimpleFileWriter swf = new SimpleFileWriter.Builder(fileName).encoding("utf-8").keepOpen().build();
 
         swf.writeLine("Ad:" + dersBilgisi.kullaniciAdi);

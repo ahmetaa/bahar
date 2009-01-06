@@ -1,18 +1,17 @@
 package bahar.swing;
 
+import bahar.bilgi.DersBilgisi;
+import bahar.bilgi.DersOturumu;
+import bahar.bilgi.SatirDinleyici;
 import net.miginfocom.swing.MigLayout;
+import org.bushe.swing.event.EventBus;
+import org.jmate.Strings;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
-
-import org.jmate.Strings;
-import org.bushe.swing.event.EventBus;
-import bahar.bilgi.DersBilgisi;
-import bahar.bilgi.DersOturumu;
-import bahar.bilgi.SatirDinleyici;
 
 
 public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
@@ -205,8 +204,8 @@ public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
         java.util.List<TextLayoutInfo> splitText(String cnt) {
             java.util.List<TextLayoutInfo> list = new ArrayList<TextLayoutInfo>();
             String[] splitz = cnt.split("\u0123");
-            System.out.println(Arrays.toString(splitz));
-            System.out.println(bicimliYazilan);
+//            System.out.println(Arrays.toString(splitz));
+//            System.out.println(bicimliYazilan);
             if (splitz.length < 2) {
                 list.add(new TextLayoutInfo(cnt, false));
                 return list;
@@ -234,7 +233,6 @@ public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
                     sb.append(textLayoutInfo.s);
                 }
             }
-            System.out.println(sb);
             return sb.append("_").toString();
         }
 

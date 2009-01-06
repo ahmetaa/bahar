@@ -12,6 +12,6 @@ public class ParmakBilgisi {
         this.shift = shift;
         this.altGr = altGr;
     }
-   
+
 }
 

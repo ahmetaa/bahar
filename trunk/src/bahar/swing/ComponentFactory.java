@@ -1,9 +1,9 @@
 package bahar.swing;
 
-import javax.swing.*;
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
+import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class ComponentFactory {
@@ -24,8 +24,8 @@ public class ComponentFactory {
     }
 
     public static Point getCenterPos(int length, int height) {
-       Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-       return new Point((size.width - length) /2 , (size.height-height)/2); 
+        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+        return new Point((size.width - length) / 2, (size.height - height) / 2);
     }
 
     public static Font VERDANA = new Font("Verdana", Font.PLAIN, 14);

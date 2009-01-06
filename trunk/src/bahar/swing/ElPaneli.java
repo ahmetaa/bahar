@@ -1,15 +1,15 @@
 package bahar.swing;
 
-import javax.swing.*;
-import java.awt.image.BufferedImage;
-import java.awt.*;
-import java.util.Map;
-
-import org.jmate.Collects;
 import bahar.bilgi.El;
 import bahar.bilgi.Parmak;
 import bahar.bilgi.ParmakBilgisi;
 import net.miginfocom.swing.MigLayout;
+import org.jmate.Collects;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.Map;
 
 
 public class ElPaneli extends JPanel {

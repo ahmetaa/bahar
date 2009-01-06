@@ -5,7 +5,7 @@ import org.bushe.swing.event.annotation.EventSubscriber;
 
 import javax.swing.*;
 
-public class StatusLabel extends JLabel{
+public class StatusLabel extends JLabel {
     public StatusLabel() {
         this.setFont(ComponentFactory.VERDANA);
         AnnotationProcessor.process(this);
