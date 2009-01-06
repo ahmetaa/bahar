@@ -1,19 +1,14 @@
 package bahar.swing;
 
 import bahar.bilgi.DersBilgisi;
-import bahar.bilgi.Klavye;
-import bahar.bilgi.Klavyeler;
 import net.miginfocom.swing.MigLayout;
+import org.bushe.swing.event.EventBus;
+import org.bushe.swing.event.annotation.AnnotationProcessor;
+import org.bushe.swing.event.annotation.EventSubscriber;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
-import org.bushe.swing.event.annotation.EventSubscriber;
-import org.bushe.swing.event.annotation.AnnotationProcessor;
-import org.bushe.swing.event.EventBus;
-import sun.awt.WindowClosingListener;
 
 public class DersFrame extends JDialog {
 

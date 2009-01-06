@@ -1,8 +1,8 @@
 package bahar.swing;
 
 import bahar.bilgi.DersBilgisi;
-import bahar.bilgi.OturumDinleyici;
 import bahar.bilgi.DersOturumu;
+import bahar.bilgi.OturumDinleyici;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -36,7 +36,6 @@ public class DurumPaneli extends JPanel implements OturumDinleyici {
         this.add(ComponentFactory.fixedLengthLabel("Yazilan:", 16));
         yazilanSayisiLbl = ComponentFactory.fixedLengthLabel("0", 16);
         this.add(yazilanSayisiLbl);
-
 
         // hata sayisi
         this.add(ComponentFactory.fixedLengthLabel("Hata:", 16));
