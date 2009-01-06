@@ -2,9 +2,11 @@ package bahar.bilgi;
 
 import org.jmate.SimpleFileWriter;
 import org.jmate.Strings;
+import org.jmate.Chars;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.io.IOException;
@@ -60,8 +62,9 @@ public class DersOturumu {
         initialize();
     }
 
+    Timer timer = new Timer("MyTimer");
     public void initialize() {
-        Timer timer = new Timer("MyTimer");
+
         TimerTask timerTask = new TimerTask() {
             public void run() {
                 if (running.get()) {
@@ -91,9 +94,42 @@ public class DersOturumu {
         else return Strings.whiteSpacesToSingleSpace(yazilan).split("[ ]").length;
     }
 
+
+    public static final char CHAR_cc = '\u00e7'; // Kuyruklu kucuk c (ch)
+    public static final char CHAR_gg = '\u011f'; // Kucuk yumusak g
+    public static final char CHAR_ii = '\u0131'; // Noktassiz kucuk i
+    public static final char CHAR_oo = '\u00f6'; // Noktali kucuk o
+    public static final char CHAR_ss = '\u015f'; // Kuyruklu kucuk s (sh)
+    public static final char CHAR_uu = '\u00fc'; // Noktali kucuk u
+
+    
+    public void stopTimer() {
+        timer.cancel();
+    }
+
     public void kaydet() throws IOException {
-        String fileName = Strings.eliminateWhiteSpaces(dersBilgisi.kullaniciAdi) + "_" + (System.currentTimeMillis() + ".txt");
+
+        String kullaniciAdi = dersBilgisi.kullaniciAdi.toLowerCase(new Locale("tr"));
+        StringBuilder sb = new StringBuilder();
+        for(char c : kullaniciAdi.toCharArray()) {
+            if(c==CHAR_cc)
+              sb.append('c');
+            else if (c==CHAR_gg)
+              sb.append('g');
+            else if(c==CHAR_ii)
+              sb.append('i');
+            else if(c==CHAR_oo)
+              sb.append('o');
+            else if(c==CHAR_ss)
+              sb.append('s');
+            else if(c==CHAR_uu)
+             sb.append('u');
+            else if(Chars.isAsciiAlphanumeric(c))
+              sb.append(c);
+        }
+        String fileName = Strings.eliminateWhiteSpaces(sb.toString().replaceAll("[ ]+","-")) + "_" + (System.currentTimeMillis() + ".txt");
         SimpleFileWriter swf = new SimpleFileWriter.Builder(fileName).encoding("utf-8").keepOpen().build();
+
         swf.writeLine("Ad:" + dersBilgisi.kullaniciAdi);
         swf.writeLine("Numara:" + dersBilgisi.kullaniciNumarasi);
         swf.writeLine("Klavye:" + dersBilgisi.klavye.ad);

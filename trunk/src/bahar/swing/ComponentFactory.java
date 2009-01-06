@@ -23,6 +23,11 @@ public class ComponentFactory {
         return null;
     }
 
+    public static Point getCenterPos(int length, int height) {
+       Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+       return new Point((size.width - length) /2 , (size.height-height)/2); 
+    }
+
     public static Font VERDANA = new Font("Verdana", Font.PLAIN, 14);
     public static Font VERDANA_BOLD = new Font("Verdana", Font.BOLD, 14);
 

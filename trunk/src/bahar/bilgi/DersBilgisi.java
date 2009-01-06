@@ -35,7 +35,7 @@ public class DersBilgisi {
 
 
     public List<String> generateLines() {
-        String wrapped = Words.wrap(icerik, 60);
+        String wrapped = Words.wrap(icerik, 80);
         String[] lines = wrapped.split("[\n]");
         List<String> strs = Collects.newArrayList();
         for (String line : lines) {

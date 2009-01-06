@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.FileInputStream;
+import java.util.Arrays;
 
 import bahar.bilgi.Klavye;
 import bahar.bilgi.Klavyeler;
@@ -109,11 +111,16 @@ public class GirisPaneli extends JPanel {
                 try {
                     String icerik = IOs.readAsString(IOs.getReader(is, "utf-8"));
                     DersBilgisi db = new DersBilgisi(icerik.replaceAll("[\n]", " "));
-                  //  DersBilgisi db = new DersBilgisi("aaaaaa aaaaa aaaaa aaaaa aaaaa aaaa aaaaaaa aaaaaa aaaaaa aaaaa aaaaaa");
+                    //  DersBilgisi db = new DersBilgisi("aaaaaa aaaaa aaaaa aaaaa aaaaa aaaa aaaaaaa aaaaaa aaaaaa aaaaa aaaaaa");
                     db.kullaniciAdi = "Test";
                     db.kullaniciNumarasi = "--";
                     flagDegerleriniBelirle(db);
                     db.klavye = getKlavye();
+                    if(!db.klavye.yaziYazilabilir(db.icerik))
+                    {
+                        hataLbl.setText("Dosya yazilamaz karakter iceriyor..");
+                        return;
+                    }
                     new DersFrame(db);
 
                     hataLbl.setText("");
@@ -150,7 +157,12 @@ public class GirisPaneli extends JPanel {
             if (rVal == JFileChooser.APPROVE_OPTION) {
                 try {
                     File f = c.getSelectedFile();
-                    String yazi = new SimpleFileReader(f).asString();
+
+                    String yazi = "";
+                    if (possibleUtf8(f))
+                        yazi = new SimpleFileReader(f, "UTF-8").asString();
+                    else
+                        yazi = new SimpleFileReader(f).asString();
                     yazi = Strings.whiteSpacesToSingleSpace(yazi.trim());
 
                     dersField.setText(f.getName());
@@ -169,6 +181,18 @@ public class GirisPaneli extends JPanel {
 
         public String getCurrentDir() {
             return currentDir;
+        }
+    }
+
+    private static final byte[] bomBytes = new byte[]{(byte) 0xef, (byte) 0xbb, (byte) 0xbf};
+
+    private static boolean possibleUtf8(File file) throws IOException {
+        InputStream is = new FileInputStream(file);
+        try {
+            byte[] bomRead = new byte[bomBytes.length];
+            return is.read(bomRead, 0, bomBytes.length) != -1 && Arrays.equals(bomRead, bomBytes);
+        } finally {
+            IOs.closeSilently(is);
         }
     }
 
@@ -225,11 +249,6 @@ public class GirisPaneli extends JPanel {
             return false;
         }
 
-        if(!isim.getText().matches("[a-zA-Z ]+")){
-            hataLbl.setText("Ad soyad sadece harflerden olusabilir.");
-            return false;
-        }
-
         if (!Strings.hasText(no.getText())) {
             hataLbl.setText("Numara bilgisi eksik.");
             return false;
@@ -252,9 +271,9 @@ public class GirisPaneli extends JPanel {
         JFrame f = new JFrame();
         f.setLayout(new MigLayout());
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setLocation(200,150);
         f.add(new GirisPaneli());
         f.pack();
+        f.setLocation(ComponentFactory.getCenterPos(f.getWidth(), f.getHeight()));
         f.setVisible(true);
     }
 }
