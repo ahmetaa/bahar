@@ -82,42 +82,13 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
         dersOturumu.setYazilan(dersIcerikPaneli.yazilan);
         try {
             dersOturumu.kaydet();
+            dersOturumu.stopTimer();
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this,
                     "Oturum kaydedilirken hata olustu! + " + e.getMessage(),
                     "Beklenmeyen Hata..",
                     JOptionPane.ERROR_MESSAGE);
         }
-    }
-
-    private class SonucDialog extends JDialog {
-
-        private SonucDialog(DersOturumu oturum) {
-
-            DurumPaneli durumPaneli = new DurumPaneli(oturum);
-
-            this.setLayout(new MigLayout());
-
-            this.add(durumPaneli, "wrap");
-            JButton btnOk = new JButton("Tamam");
-            btnOk.setFont(ComponentFactory.VERDANA);
-
-            final SonucDialog blah = this;
-
-            btnOk.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    blah.dispose();
-                    EventBus.publish(new DersEvent(false, true));
-                }
-            });
-            this.add(btnOk);
-            this.setModal(true);
-            this.setLocation(400, 200);
-            pack();
-            setVisible(true);
-        }
-
-
     }
 
     public void keyTyped(KeyEvent e) {

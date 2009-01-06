@@ -42,9 +42,13 @@ public class Klavye {
     public boolean yaziYazilabilir(String s) {
         for(char c : s.toCharArray()) {
             if(!harfYazilabilir(c))
+            {
+                System.out.println("c = " + c);
                 return false;
+            }
         }
         return true;
     }
+
 }
 

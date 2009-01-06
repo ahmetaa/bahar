@@ -130,9 +130,9 @@ public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
             this.beklenenString = beklenenString;
 
             yazilacakSatir.setText(beklenenString);
-            yazilacakSatir.setFont(new Font("Lucida Console", Font.PLAIN, 18));
+            yazilacakSatir.setFont(new Font("Lucida Console", Font.PLAIN, 16));
             yazilacakSatir.setForeground(Color.DARK_GRAY);
-            yazilanSatir.setFont(new Font("Lucida Console", Font.PLAIN, 18));
+            yazilanSatir.setFont(new Font("Lucida Console", Font.PLAIN, 16));
             yazilanSatir.setText(Strings.repeat(" ", beklenenString.length()));
             yazilanSatir.setForeground(Color.BLACK);
 
