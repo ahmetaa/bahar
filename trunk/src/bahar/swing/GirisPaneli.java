@@ -1,34 +1,33 @@
 package bahar.swing;
 
+import bahar.bilgi.DersBilgisi;
+import bahar.bilgi.Klavye;
+import bahar.bilgi.Klavyeler;
 import net.miginfocom.swing.MigLayout;
+import org.jmate.IOs;
+import org.jmate.SimpleFileReader;
+import org.jmate.Strings;
+import org.jmate.Systems;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.FileInputStream;
 import java.util.Arrays;
-
-import bahar.bilgi.Klavye;
-import bahar.bilgi.Klavyeler;
-import bahar.bilgi.DersBilgisi;
-import org.jmate.Systems;
-import org.jmate.SimpleFileReader;
-import org.jmate.Strings;
-import org.jmate.IOs;
 
 public class GirisPaneli extends JPanel {
 
     private JTextField isim;
     private JTextField no;
     private JComboBox klavyeCombo;
-    private JCheckBox klavyeGoster;
+    //private JCheckBox klavyeGoster;
     private JCheckBox elGoster;
     private JCheckBox durumGoster;
-    private JCheckBox silmeyeIzinVer;
+    //private JCheckBox silmeyeIzinVer;
     private JTextField dersField;
     private JLabel hataLbl;
     private JTextArea yaziAlani = new JTextArea();
@@ -93,6 +92,13 @@ public class GirisPaneli extends JPanel {
         btnStart.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (validateform()) {
+                    DersBilgisi db = dersBilgisiUret();
+/*
+                    if (!db.klavye.yaziYazilabilir(db.icerik)) {
+                        hataLbl.setText("Calisma yazilamaz karakter iceriyor.");
+                        return;
+                    }
+*/
                     new DersFrame(dersBilgisiUret());
                     hataLbl.setText("");
                     validate();
@@ -110,17 +116,22 @@ public class GirisPaneli extends JPanel {
                 InputStream is = IOs.getClassPathResourceAsStream("/ornekler/ornek.txt");
                 try {
                     String icerik = IOs.readAsString(IOs.getReader(is, "utf-8"));
+                    if (icerik.length() > 500) {
+                        hataLbl.setText("yazi boyutu cok buyuk..");
+                        return;
+                    }
                     DersBilgisi db = new DersBilgisi(icerik.replaceAll("[\n]", " "));
                     //  DersBilgisi db = new DersBilgisi("aaaaaa aaaaa aaaaa aaaaa aaaaa aaaa aaaaaaa aaaaaa aaaaaa aaaaa aaaaaa");
                     db.kullaniciAdi = "Test";
                     db.kullaniciNumarasi = "--";
                     flagDegerleriniBelirle(db);
                     db.klavye = getKlavye();
-                    if(!db.klavye.yaziYazilabilir(db.icerik))
-                    {
+/*
+                    if (!db.klavye.yaziYazilabilir(db.icerik)) {
                         hataLbl.setText("Dosya yazilamaz karakter iceriyor..");
                         return;
                     }
+*/
                     new DersFrame(db);
 
                     hataLbl.setText("");
@@ -158,13 +169,16 @@ public class GirisPaneli extends JPanel {
                 try {
                     File f = c.getSelectedFile();
 
-                    String yazi = "";
+                    String yazi;
                     if (possibleUtf8(f))
                         yazi = new SimpleFileReader(f, "UTF-8").asString();
                     else
                         yazi = new SimpleFileReader(f).asString();
+                    if (yazi.length() > 500) {
+                        hataLbl.setText("yazi boyutu cok buyuk..");
+                        return;
+                    }
                     yazi = Strings.whiteSpacesToSingleSpace(yazi.trim());
-
                     dersField.setText(f.getName());
                     yaziAlani.setColumns(30);
                     yaziAlani.setRows(5);
