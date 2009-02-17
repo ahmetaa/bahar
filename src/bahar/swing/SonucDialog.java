@@ -20,6 +20,8 @@ public class SonucDialog extends JDialog {
         JButton btnOk = new JButton("Tamam");
         btnOk.setFont(ComponentFactory.VERDANA);
 
+        EventBus.publish(new StatusEvent("Yazim oturumu sonlandi."));
+
         btnOk.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 dispose();
@@ -29,8 +31,8 @@ public class SonucDialog extends JDialog {
         this.add(btnOk);
         this.setModal(true);
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        this.pack();
         this.setLocation(ComponentFactory.getCenterPos(this.getWidth(), this.getHeight()));
+        this.pack();
         this.setVisible(true);
     }
 }

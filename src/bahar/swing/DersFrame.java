@@ -22,10 +22,9 @@ public class DersFrame extends JDialog {
         setLayout(new MigLayout());
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         this.addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
-                EventBus.clearAllSubscribers();
-                EventBus.clearCache();
-                dispose();
+                closeWindow();
             }
         });
         this.setModal(true);
@@ -44,10 +43,14 @@ public class DersFrame extends JDialog {
     public void onEvent(DersEvent event) {
         if (event.dersSonucuKapandi) {
             anaDersPaneli.saveSession();
-            EventBus.clearAllSubscribers();
-            EventBus.clearCache();
-            this.dispose();
+            closeWindow();
         }
+    }
+
+    private void closeWindow() {
+        EventBus.clearAllSubscribers();
+        EventBus.clearCache();
+        this.dispose();
     }
 
 }

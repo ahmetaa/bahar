@@ -15,30 +15,26 @@ import java.io.IOException;
 
 public class AnaDersPaneli extends JPanel implements KeyListener {
 
-    DersBilgisi dersBilgisi;
-    DurumPaneli durumPaneli;
-    ElPaneli elPaneli;
-    DersOturumu dersOturumu;
-    DersIcerikPaneli dersIcerikPaneli;
-    Klavye klavye;
-    StatusLabel statusLabel = new StatusLabel();
+    private ElPaneli elPaneli;
+    private DersOturumu dersOturumu;
+    private DersIcerikPaneli dersIcerikPaneli;
+    private Klavye klavye;
+    private StatusLabel statusLabel = new StatusLabel();
 
-    boolean basladi = false;
-    boolean durakladi = false;
+    private boolean basladi = false;
+    private boolean durakladi = false;
 
     public AnaDersPaneli(DersBilgisi dersBilgisi) {
 
         // Eventbus mekanizmasina bu sinifi ekle.
         AnnotationProcessor.process(this);
 
-        this.dersBilgisi = dersBilgisi;
         this.klavye = dersBilgisi.klavye;
-        this.klavye = klavye;
 
         MigLayout ml = new MigLayout("", "[center][center]", "[center][center]");
         this.setLayout(ml);
 
-        durumPaneli = new DurumPaneli(dersBilgisi);
+        DurumPaneli durumPaneli = new DurumPaneli(dersBilgisi);
 
         dersOturumu = new DersOturumu(dersBilgisi, durumPaneli);
 
@@ -67,7 +63,6 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
     @EventSubscriber(eventClass = DersEvent.class)
     public void onEvent(DersEvent event) {
         if (event.dersSonlandi) {
-            EventBus.publish(new StatusEvent("Yazim oturumu sonlandi."));
             new SonucDialog(dersOturumu);
         }
 
@@ -79,7 +74,7 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
     }
 
     public void saveSession() {
-        dersOturumu.setYazilan(dersIcerikPaneli.yazilan);
+        dersOturumu.setYazilan(dersIcerikPaneli.getYazilan());
         try {
             dersOturumu.kaydet();
             dersOturumu.stopTimer();

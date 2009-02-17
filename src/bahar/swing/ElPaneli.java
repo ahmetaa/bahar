@@ -48,12 +48,9 @@ public class ElPaneli extends JPanel {
     private class TekEl extends JPanel {
 
         private BufferedImage ElResmi;
-        private El hand;
         public static final int KARE_BOYUTU = 30;
         private Map<Parmak, Rectangle> parmakKareTablosu = Collects.newHashMap();
         private Parmak parmak = Parmak.TANIMSIZ;
-        // if true, panel do not fire finger change events and finger recktangle cannot be altered.
-        boolean readOnly = false;
 
 
         public Parmak getSelectedFinger() {
@@ -74,7 +71,6 @@ public class ElPaneli extends JPanel {
                     new Point(116, 18),
                     new Point(156, 35),
                     new Point(188, 76)};
-            this.hand = el;
 
             if (el == El.SAG) {
                 ElResmi = ComponentFactory.getImageResource("/resimler/sag-el.png");

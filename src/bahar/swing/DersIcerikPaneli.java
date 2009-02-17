@@ -16,21 +16,18 @@ import java.util.List;
 
 public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
 
-    final String icerik;
-    List<SatirPaneli> satirlar = new ArrayList<SatirPaneli>();
-    int currentLine = 0;
+    private List<SatirPaneli> satirlar = new ArrayList<SatirPaneli>();
+    private int currentLine = 0;
 
-    final DersBilgisi dersBilgisi;
-    final DersOturumu oturum;
+    private final DersBilgisi dersBilgisi;
+    private final DersOturumu oturum;
 
-    boolean yaziSonunaErisildi = false;
-    String yazilan = "";
+    private String yazilan = "";
 
     public DersIcerikPaneli(DersBilgisi db, DersOturumu oturum) {
 
         this.oturum = oturum;
         this.dersBilgisi = db;
-        this.icerik = db.icerik;
 
         this.setLayout(new MigLayout("wrap 1"));
 
@@ -42,6 +39,10 @@ public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
             this.add(tl, "grow");
         }
         current().goActive();
+    }
+
+    public String getYazilan() {
+        return yazilan;
     }
 
     public char beklenenHarf() {
@@ -82,7 +83,6 @@ public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
 
         // ders sonuna gelinmisse.
         if (yaziSonunaGelindi()) {
-            yaziSonunaErisildi = true;
             oturum.durakla();
             for (SatirPaneli satirPaneli : satirlar) {
                 yazilan += satirPaneli.yazilan;
@@ -204,8 +204,6 @@ public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
         java.util.List<TextLayoutInfo> splitText(String cnt) {
             java.util.List<TextLayoutInfo> list = new ArrayList<TextLayoutInfo>();
             String[] splitz = cnt.split("\u0123");
-//            System.out.println(Arrays.toString(splitz));
-//            System.out.println(bicimliYazilan);
             if (splitz.length < 2) {
                 list.add(new TextLayoutInfo(cnt, false));
                 return list;
