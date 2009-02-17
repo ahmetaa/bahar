@@ -25,7 +25,7 @@ public class Klavyeler {
 
 
     public static Klavye turkceQ() {
-        String shift = "é!'^+%&/()=?_QWERTYUIOP\u011e\u00dcASDFGHJKL\u015e\u0130>ZXCVBNM\u00d6\u00c7:;";
+        String shift = "ï¿½!'^+%&/()=?_QWERTYUIOP\u011e\u00dcASDFGHJKL\u015e\u0130>ZXCVBNM\u00d6\u00c7:;";
         String normal = "*1234567890/-qwertyu\u0131op\u011f\u00dcasdfghjkl\u015fi<zxcvbnm\u00f6\u00e7., ";
         // TODO: FIX BELOW.
         String altGr = "";

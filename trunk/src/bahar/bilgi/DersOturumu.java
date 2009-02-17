@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class DersOturumu {
 
-    private final AtomicInteger zamanSaniye = new AtomicInteger(0);
+    private final AtomicInteger zamanYuzMilisaniye = new AtomicInteger(0);
     public int yazilanHarfSayisi;
     public int gorunenHataSayisi;
     public int toplamHataSayisi;
@@ -41,8 +41,8 @@ public class DersOturumu {
     }
 
     public String harfHizHasapla() {
-        if (zamanSaniye.get() > 3) {
-            float f = (60 * yazilanHarfSayisi / (float) zamanSaniye.get());
+        if (zamanYuzMilisaniye.get() > 3) {
+            float f = (60f * yazilanHarfSayisi / ((float) zamanYuzMilisaniye.get() / 10));
             return String.format("%.1f", f);
         } else return "--";
     }
@@ -69,12 +69,12 @@ public class DersOturumu {
         TimerTask timerTask = new TimerTask() {
             public void run() {
                 if (running.get()) {
-                    zamanSaniye.incrementAndGet();
-                    dinleyici.saniyeArtti(zamanSaniye.get(), harfHizHasapla());
+                    zamanYuzMilisaniye.incrementAndGet();
+                    dinleyici.saniyeArtti(zamanYuzMilisaniye.get(), harfHizHasapla());
                 }
             }
         };
-        timer.schedule(timerTask, 0, 1000);
+        timer.schedule(timerTask, 0, 100);
     }
 
     public void durakla() {
@@ -85,8 +85,12 @@ public class DersOturumu {
         running.set(true);
     }
 
+    private int zamanSaniye() {
+        return zamanYuzMilisaniye.get() / 10;
+    }
+
     public int sure() {
-        return zamanSaniye.get();
+        return zamanSaniye();
     }
 
     public int yazilanKelimeSayisi() {
@@ -142,7 +146,7 @@ public class DersOturumu {
         swf.writeLine("Yazilan kelime sayisi:" + yazilanKelimeSayisi());
         swf.writeLine("Gorunen Hata Sayisi:" + gorunenHataSayisi);
         swf.writeLine("Toplam Hata Sayisi:" + toplamHataSayisi);
-        swf.writeLine("Sure (sn):" + zamanSaniye);
+        swf.writeLine("Sure (sn):" + String.format("%.1f", ((float)zamanYuzMilisaniye.get() / 10f) ));
         swf.writeLine("Hiz (dakika/kelime):" + kelimeHizHesapla());
         swf.writeLine("Hiz (dakika/harf):" + harfHizHasapla());
 //        swf.writeLine("Dogru yazim orani (gorunen hatalara):" +  )
@@ -151,9 +155,10 @@ public class DersOturumu {
     }
 
     private String kelimeHizHesapla() {
-        float f = (60 * yazilanKelimeSayisi() / (float) zamanSaniye.get());
+        float f = (60f * yazilanKelimeSayisi() / ((float) zamanYuzMilisaniye.get() / 10f));
         return String.format("%.1f", f);
     }
+
 
 
 }
