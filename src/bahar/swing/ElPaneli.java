@@ -4,11 +4,11 @@ import bahar.bilgi.El;
 import bahar.bilgi.Parmak;
 import bahar.bilgi.ParmakBilgisi;
 import net.miginfocom.swing.MigLayout;
-import org.jmate.Collects;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -49,7 +49,7 @@ public class ElPaneli extends JPanel {
 
         private BufferedImage ElResmi;
         public static final int KARE_BOYUTU = 30;
-        private Map<Parmak, Rectangle> parmakKareTablosu = Collects.newHashMap();
+        private Map<Parmak, Rectangle> parmakKareTablosu = new HashMap<Parmak, Rectangle>();
         private Parmak parmak = Parmak.TANIMSIZ;
 
 

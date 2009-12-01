@@ -1,37 +1,32 @@
 package bahar.swing;
 
+import bahar.bilgi.DersBilgiHatasi;
 import bahar.bilgi.DersBilgisi;
-import bahar.bilgi.Klavye;
-import bahar.bilgi.Klavyeler;
+import bahar.i18n.I18n;
 import net.miginfocom.swing.MigLayout;
-import org.jmate.IOs;
-import org.jmate.SimpleFileReader;
-import org.jmate.Strings;
-import org.jmate.Systems;
+import org.jcaki.Files;
+import org.jcaki.IOs;
+import org.jcaki.Strings;
+import org.jcaki.Systems;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
+import java.util.List;
 
 public class GirisPaneli extends JPanel {
 
     private JTextField isim;
     private JTextField no;
-    private JComboBox klavyeCombo;
-    //private JCheckBox klavyeGoster;
-    private JCheckBox elGoster;
-    private JCheckBox durumGoster;
-    //private JCheckBox silmeyeIzinVer;
     private JTextField dersField;
     private JLabel hataLbl;
-    private JTextArea yaziAlani = new JTextArea();
-    private String currentDir;
+    private File currentDir;
+
+    private DersBilgisi dersBilgisi = null;
 
     public GirisPaneli() {
 
@@ -45,11 +40,10 @@ public class GirisPaneli extends JPanel {
 
     }
 
-
     private JPanel bilgiler() {
         JPanel jp = new JPanel(new MigLayout("wrap 3"));
 
-        jp.add(ComponentFactory.boldLabel("Lutfen Asagidaki Bilgileri giriniz.."), "span 3");
+        jp.add(ComponentFactory.boldLabel(I18n.getText("bilgi.aciklama")), "span 3");
         jp.add(new JPanel(), "wrap");
 
         JLabel isimLbl = ComponentFactory.label("Ad Soyad:");
@@ -62,46 +56,43 @@ public class GirisPaneli extends JPanel {
         jp.add(numaraLbl);
         jp.add(no, "wrap");
 
-        jp.add(new JPanel(), "wrap");
-        JLabel klavye = ComponentFactory.label("Klavye:");
-        klavyeCombo = new JComboBox(new String[]{"Turkce F", "Turkce Q", "Amerikan Q"});
-        klavyeCombo.setFont(ComponentFactory.VERDANA);
-        jp.add(klavye);
-        jp.add(klavyeCombo, "wrap");
+        currentDir = new File(".");
 
-        jp.add(ComponentFactory.label("Ders:"));
+        jp.add(ComponentFactory.label(I18n.getText("bilgi.dosya")));
         dersField = ComponentFactory.textField();
+        File firstBhr = getFirstBhrFile();
+        if (firstBhr != null)
+            dersField.setText(firstBhr.getName());
+        dersField.setEditable(false);
         jp.add(dersField);
         JButton btn = new JButton("..");
         btn.setFont(ComponentFactory.VERDANA);
 
-        currentDir = Systems.getUserHome().getAbsolutePath();
         btn.addActionListener(new FileButtonListener(this));
 
         jp.add(btn, "shrink");
 
-        //       JScrollPane jsp = new JScrollPane(yaziAlani);
-        //       jp.add(jsp, "span 3");
-
-        jp.add(checkBoxPanel(), "span 3");
-
-        JButton btnStart = new JButton("Teste Basla");
+        JButton btnStart = new JButton(I18n.getText("bilgi.basla"));
         btnStart.setFont(ComponentFactory.VERDANA);
 
 
         btnStart.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (validateform()) {
-                    DersBilgisi db = dersBilgisiUret();
-/*
-                    if (!db.klavye.yaziYazilabilir(db.icerik)) {
-                        hataLbl.setText("Calisma yazilamaz karakter iceriyor.");
-                        return;
+                    try {
+                        dersBilgisi = new DersBilgisi(new File(currentDir, dersField.getText()));
+                        setStudentData();
+                        if (!dersBilgisi.klavye.yaziYazilabilir(dersBilgisi.icerik)) {
+                            hataLbl.setText("Calisma yazilamaz karakter iceriyor.");
+                            return;
+                        }
+                        new DersFrame(dersBilgisi);
+                        hataLbl.setText("");
+                        validate();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                        hata("Dosya erisiminde hata olustu.");
                     }
-*/
-                    new DersFrame(dersBilgisiUret());
-                    hataLbl.setText("");
-                    validate();
                 }
             }
         });
@@ -109,36 +100,9 @@ public class GirisPaneli extends JPanel {
         JButton btnTest = new JButton("Deneme Yap");
         btnTest.setFont(ComponentFactory.VERDANA);
 
-
         btnTest.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //InputStream is = GirisPaneli.class.getResourceAsStream("/ornekler/ornek.txt");
-                InputStream is = IOs.getClassPathResourceAsStream("/ornekler/ornek.txt");
-                try {
-                    String icerik = IOs.readAsString(IOs.getReader(is, "utf-8"));
-                    if (icerik.length() > 500) {
-                        hataLbl.setText("yazi boyutu cok buyuk..");
-                        return;
-                    }
-                    DersBilgisi db = new DersBilgisi(icerik.replaceAll("[\n]", " "));
-                    //  DersBilgisi db = new DersBilgisi("aaaaaa aaaaa aaaaa aaaaa aaaaa aaaa aaaaaaa aaaaaa aaaaaa aaaaa aaaaaa");
-                    db.kullaniciAdi = "Test";
-                    db.kullaniciNumarasi = "--";
-                    flagDegerleriniBelirle(db);
-                    db.klavye = getKlavye();
-/*
-                    if (!db.klavye.yaziYazilabilir(db.icerik)) {
-                        hataLbl.setText("Dosya yazilamaz karakter iceriyor..");
-                        return;
-                    }
-*/
-                    new DersFrame(db);
-
-                    hataLbl.setText("");
-                    validate();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                testAction();
             }
         });
 
@@ -147,6 +111,39 @@ public class GirisPaneli extends JPanel {
 
         return jp;
     }
+
+
+    private void testAction() {
+        File out = new File(Systems.getJavaIoTmpDir(), "bahar_test.bhr");
+        try {
+            IOs.copy(
+                    IOs.getClassPathResourceAsStream("/ornekler/test.bhr"),
+                    new FileOutputStream(out));
+
+            this.dersBilgisi = new DersBilgisi(out);
+            dersBilgisi.kullaniciAdi = "Test";
+            dersBilgisi.kullaniciNumarasi = "--";
+            new DersFrame(dersBilgisi);
+            hataLbl.setText("");
+            validate();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        } catch (DersBilgiHatasi hata) {
+            hata(hata.getMessage());
+        }
+    }
+
+
+    private void hata(String mesaj) {
+        hataLbl.setText(mesaj);
+    }
+
+
+    private File getFirstBhrFile() {
+        List<File> files = Files.crawlDirectory(currentDir, false, new Files.ExtensionFilter("bhr"));
+        return files.size() > 0 ? files.get(0) : null;
+    }
+
 
     private class FileButtonListener implements ActionListener {
 
@@ -168,47 +165,27 @@ public class GirisPaneli extends JPanel {
             if (rVal == JFileChooser.APPROVE_OPTION) {
                 try {
                     File f = c.getSelectedFile();
-
-                    String yazi;
-                    if (possibleUtf8(f))
-                        yazi = new SimpleFileReader(f, "UTF-8").asString();
-                    else
-                        yazi = new SimpleFileReader(f).asString();
-                    if (yazi.length() > 500) {
-                        hataLbl.setText("yazi boyutu cok buyuk..");
-                        return;
-                    }
-                    yazi = Strings.whiteSpacesToSingleSpace(yazi.trim());
+                    dersBilgisi = new DersBilgisi(f);
+                    setStudentData();
                     dersField.setText(f.getName());
-                    yaziAlani.setColumns(30);
-                    yaziAlani.setRows(5);
-                    yaziAlani.setWrapStyleWord(true);
-                    yaziAlani.setText(yazi);
-                    currentDir = f.getAbsolutePath();
+                    currentDir = f;
                     component.validate();
                 } catch (IOException ex) {
                     ex.printStackTrace();
+                } catch (DersBilgiHatasi hata) {
+                    hata(hata.getMessage());
                 }
-
             }
         }
 
-        public String getCurrentDir() {
-            return currentDir;
-        }
+
     }
 
-    private static final byte[] bomBytes = new byte[]{(byte) 0xef, (byte) 0xbb, (byte) 0xbf};
-
-    private static boolean possibleUtf8(File file) throws IOException {
-        InputStream is = new FileInputStream(file);
-        try {
-            byte[] bomRead = new byte[bomBytes.length];
-            return is.read(bomRead, 0, bomBytes.length) != -1 && Arrays.equals(bomRead, bomBytes);
-        } finally {
-            IOs.closeSilently(is);
-        }
+    private void setStudentData() {
+        dersBilgisi.kullaniciAdi = isim.getText().trim();
+        dersBilgisi.kullaniciNumarasi = no.getText().trim();
     }
+
 
     private JPanel hataPanel() {
         hataLbl = ComponentFactory.boldLabel("");
@@ -216,45 +193,6 @@ public class GirisPaneli extends JPanel {
         JPanel jp = new JPanel(new MigLayout());
         jp.add(hataLbl, "grow");
         return jp;
-    }
-
-    private JPanel checkBoxPanel() {
-        JPanel jp = new JPanel(new MigLayout("wrap 2"));
-        jp.add(new JPanel(), "wrap");
-        jp.add(ComponentFactory.label("El resimlerini goster"));
-        elGoster = new JCheckBox("", true);
-        jp.add(elGoster, "wrap");
-
-        jp.add(ComponentFactory.label("Durum penceresi goster"));
-        durumGoster = new JCheckBox("", false);
-        jp.add(durumGoster, "wrap");
-        return jp;
-    }
-
-    public Klavye getKlavye() {
-        switch (klavyeCombo.getSelectedIndex()) {
-            case 0:
-                return Klavyeler.turkceF();
-            case 1:
-                return Klavyeler.turkceQ();
-            case 2:
-                return Klavyeler.amerikanQ();
-        }
-        throw new IllegalArgumentException("Klavye bulunamadi!");
-    }
-
-    public DersBilgisi dersBilgisiUret() {
-        DersBilgisi dersBilgisi = new DersBilgisi(yaziAlani.getText());
-        dersBilgisi.kullaniciAdi = isim.getText().trim();
-        dersBilgisi.kullaniciNumarasi = no.getText().trim();
-        dersBilgisi.klavye = getKlavye();
-        flagDegerleriniBelirle(dersBilgisi);
-        return dersBilgisi;
-    }
-
-    private void flagDegerleriniBelirle(DersBilgisi dersBilgisi) {
-        dersBilgisi.durumGoster = durumGoster.isSelected();
-        dersBilgisi.elGoster = elGoster.isSelected();
     }
 
     public boolean validateform() {
@@ -267,7 +205,7 @@ public class GirisPaneli extends JPanel {
             hataLbl.setText("Numara bilgisi eksik.");
             return false;
         }
-        if (!Strings.hasText(yaziAlani.getText())) {
+        if (!Strings.hasText(dersField.getText())) {
             hataLbl.setText("Ders bilgisi eksik.");
             return false;
         }

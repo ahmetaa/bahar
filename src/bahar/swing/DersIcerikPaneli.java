@@ -5,7 +5,7 @@ import bahar.bilgi.DersOturumu;
 import bahar.bilgi.SatirDinleyici;
 import net.miginfocom.swing.MigLayout;
 import org.bushe.swing.event.EventBus;
-import org.jmate.Strings;
+import org.jcaki.Strings;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,8 +21,6 @@ public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
 
     private final DersBilgisi dersBilgisi;
     private final DersOturumu oturum;
-
-    private String yazilan = "";
 
     public DersIcerikPaneli(DersBilgisi db, DersOturumu oturum) {
 
@@ -42,7 +40,11 @@ public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
     }
 
     public String getYazilan() {
-        return yazilan;
+        String y = "";
+        for (SatirPaneli satirPaneli : satirlar) {
+            y += satirPaneli.yazilan;
+        }
+        return y.trim();
     }
 
     public char beklenenHarf() {
@@ -84,10 +86,6 @@ public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
         // ders sonuna gelinmisse.
         if (yaziSonunaGelindi()) {
             oturum.durakla();
-            for (SatirPaneli satirPaneli : satirlar) {
-                yazilan += satirPaneli.yazilan;
-            }
-            yazilan = yazilan.trim();
             EventBus.publish(new DersEvent(true));
         } else {
             currentLine++;
@@ -167,7 +165,7 @@ public class DersIcerikPaneli extends JPanel implements SatirDinleyici {
             char expectedChr = beklenenString.charAt(cursor);
 
             // eger son yazilan karakter hatali ise tekrar yazmaya musade etme.
-            if (ke != expectedChr && lastWasError) {
+            if (ke != expectedChr && lastWasError && !dersBilgisi.ardisilHataGoster) {
                 satirDinleyici.hataYapildi(ke, false);
                 return;
             }

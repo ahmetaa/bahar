@@ -1,7 +1,7 @@
 package bahar.bilgi;
 
-import org.jmate.Collects;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -24,6 +24,7 @@ public class Klavyeler {
     }
 
 
+    //TODO: fix a
     public static Klavye turkceQ() {
         String shift = "�!'^+%&/()=?_QWERTYUIOP\u011e\u00dcASDFGHJKL\u015e\u0130>ZXCVBNM\u00d6\u00c7:;";
         String normal = "*1234567890/-qwertyu\u0131op\u011f\u00dcasdfghjkl\u015fi<zxcvbnm\u00f6\u00e7., ";
@@ -61,7 +62,7 @@ public class Klavyeler {
     }
 
     private static Klavye uret(String ad, String shift, String normal, String altGr, String[] sagEl, String[] solEl) {
-        Map<Character, ParmakBilgisi> parmakBilgiTablosu = Collects.newHashMap();
+        Map<Character, ParmakBilgisi> parmakBilgiTablosu = new HashMap<Character, ParmakBilgisi>();
 
         //TODO: kod tekrari yapma.
         for (int i = 0; i < sagEl.length; i++) {
@@ -86,5 +87,18 @@ public class Klavyeler {
         return new Klavye(ad, shift, normal, altGr, parmakBilgiTablosu);
     }
 
+    public static Klavye getFromLayout(KlavyeYerlesimi yerlesim) {
+        switch (yerlesim) {
+            case AMERIKAN_Q:
+                return amerikanQ();
+            case TURKCE_F:
+                return turkceF();
+            case TURKCE_Q:
+                return turkceQ();
+            default:
+                throw new IllegalArgumentException("Cannot find keyboard!" + yerlesim.name());
+
+        }
+    }
 
 }
