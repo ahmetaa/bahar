@@ -1,0 +1,26 @@
+baslik=Bahar
+
+bilgi.aciklama=Lütfen aşağıdaki bilgileri giriniz..
+bilgi.adsoyad=Ad Soyad:
+bilgi.numara=Numara
+bilgi.dosya=Calışma Dosyası
+bilgi.basla=Calışmaya Başla
+bilgi.test=Deneme Yap
+bilgi.hatta.hatalikarakter=Dosya yazılamaz karakter içeriyor.
+bilgi.hatta.adsoyadeksik=Ad-Soyad bilgisi eksik.
+bilgi.hatta.numaraeksik=Numara bilgisi eksik.
+bilgi.hatta.derseksik=Ders bilgisi eksik.
+
+oturum.baslangic=Bir tuşa basınca oturum başlayacak.
+oturum.basladi=Oturum başladı. Duraklama icin ESC tuşunu kullanın.
+oturum.durakladi=Oturum Durakladı. Tuşa basarak devam edebilirsiniz.
+oturum.devamediyor=Oturum devam ediyor. Duraklama icin ESC tuşunu kullanın.
+
+
+
+
+
+
+
+
+

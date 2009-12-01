@@ -2,11 +2,11 @@
 
 <project name="bahar" default="dagitim" basedir=".">
 
-    <property name="ad-surum" value="bahar-0.3.4"/>
+    <property name="ad-surum" value="bahar-0.4"/>
 
     <!-- derleme icin gerekli kutuphanelerin dizinini belirt.-->
     <path id="classpath.build">
-        <fileset dir="lib"/>
+        <fileset dir="lib/runtime"/>
     </path>
 
     <target name="temizle">
@@ -52,7 +52,7 @@
         <mkdir dir="dagitim"/>
 
         <copy todir="dagitim">
-            <fileset dir="lib"/>
+            <fileset dir="lib/runtime"/>
             <fileset file="${ad-surum}.jar"/>
             <!--<fileset file="run.sh" />-->
             <fileset file="run.bat"/>
@@ -71,6 +71,28 @@
         <zip basedir="dagitim" file="dagitim/${ad-surum}.zip"/>
 
     </target>
+
+
+    <!-- dagitim kutuphanelerini jar icerisine gomelim.-->
+    <target name="jar-full" depends="derle">
+        <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask"
+                 classpath="lib/dev/jarjar-1.0.jar"/>
+        <jarjar jarfile="${ad-surum}.jar">
+            <fileset dir="build"/>
+            <zipfileset src="lib/runtime/jcaki-1.0-Alpha.jar"/>
+            <rule pattern="org.jcaki.**" result="bahar.jcaki.@1"/>
+            <zipfileset src="lib/runtime/miglayout-3.7.1-swing.jar"/>
+            <rule pattern="miginfocom.**" result="bahar.mig.@1"/>
+            <zipfileset src="lib/runtime/eventbus-1.3.jar"/>
+            <rule pattern="swing.**" result="bahar.eventbus.@1"/>
+            <manifest>
+                <attribute name="Built-By" value="aaa"/>
+                <attribute name="Main-Class"
+                           value="bahar.swing.GirisPaneli"/>
+            </manifest>
+        </jarjar>
+    </target>
+
 
 
 </project>

@@ -4,6 +4,7 @@ import bahar.bilgi.DersBilgisi;
 import bahar.bilgi.DersOturumu;
 import bahar.bilgi.OturumDinleyici;
 import net.miginfocom.swing.MigLayout;
+import org.bushe.swing.event.annotation.EventSubscriber;
 
 import javax.swing.*;
 
@@ -29,11 +30,12 @@ public class DurumPaneli extends JPanel implements OturumDinleyici {
         this.add(sureLbl);
 
         // toplam
-        this.add(ComponentFactory.fixedLengthLabel("Toplam:", 16));
-        this.add(ComponentFactory.fixedLengthLabel(String.valueOf(dersBilgisi.harfSayisi), 16));
+        this.add(ComponentFactory.fixedLengthLabel("Kelime:", 16));
+        this.add(ComponentFactory.fixedLengthLabel(String.valueOf(dersBilgisi.kelimeSayisi()), 16));
+
 
         // yazilan
-        this.add(ComponentFactory.fixedLengthLabel("Yazilan:", 16));
+        this.add(ComponentFactory.fixedLengthLabel("Yazilan harf:", 16));
         yazilanSayisiLbl = ComponentFactory.fixedLengthLabel("0", 16);
         this.add(yazilanSayisiLbl);
 
@@ -46,8 +48,14 @@ public class DurumPaneli extends JPanel implements OturumDinleyici {
         this.add(ComponentFactory.fixedLengthLabel("Hiz (harf/dk):", 16));
         hizLbl = ComponentFactory.fixedLengthLabel("--", 16);
         this.add(hizLbl);
-
     }
+    
+
+    @EventSubscriber(eventClass = OturumEvent.class)
+    public void onEvent(DersEvent event) {
+    }
+
+
 
     public DurumPaneli(DersOturumu oturum) {
         this(oturum.dersBilgisi);
@@ -69,7 +77,6 @@ public class DurumPaneli extends JPanel implements OturumDinleyici {
         this.hizLbl.setText(hiz);
         validate();
     }
-
 
     private String sureFormatla(int sn) {
         StringBuilder sb = new StringBuilder();

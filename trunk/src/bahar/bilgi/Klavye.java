@@ -1,7 +1,6 @@
 package bahar.bilgi;
 
-import org.jmate.Collects;
-
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -13,7 +12,7 @@ public class Klavye {
     String shiftKarakterleri;
     String normalKarakterler;
     String altGrKarakterleri;
-    private Map<Character, ParmakBilgisi> parmakTablosu = Collects.newHashMap();
+    private Map<Character, ParmakBilgisi> parmakTablosu = new HashMap<Character, ParmakBilgisi>();
     private String tumKArakterler;
 
     public Klavye(

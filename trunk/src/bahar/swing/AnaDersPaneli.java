@@ -3,6 +3,8 @@ package bahar.swing;
 import bahar.bilgi.DersBilgisi;
 import bahar.bilgi.DersOturumu;
 import bahar.bilgi.Klavye;
+import bahar.bilgi.OturumDinleyici;
+import bahar.i18n.I18n;
 import net.miginfocom.swing.MigLayout;
 import org.bushe.swing.event.EventBus;
 import org.bushe.swing.event.annotation.AnnotationProcessor;
@@ -36,7 +38,8 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
 
         DurumPaneli durumPaneli = new DurumPaneli(dersBilgisi);
 
-        dersOturumu = new DersOturumu(dersBilgisi, durumPaneli);
+        dersOturumu = new DersOturumu(dersBilgisi);
+        dersOturumu.addDinleyici(durumPaneli);
 
         dersIcerikPaneli = new DersIcerikPaneli(dersBilgisi, this.dersOturumu);
 
@@ -57,15 +60,15 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
         this.setFocusable(true);
         this.addKeyListener(this);
 
-        EventBus.publish(new StatusEvent("Bir tusa basinca oturum baslayacak."));
+        EventBus.publish(new StatusEvent(I18n.getText("oturum.baslangic")));
     }
 
     @EventSubscriber(eventClass = DersEvent.class)
     public void onEvent(DersEvent event) {
         if (event.dersSonlandi) {
+            saveSession();
             new SonucDialog(dersOturumu);
         }
-
     }
 
     public void setParmakIsareti(char c) {
@@ -74,10 +77,10 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
     }
 
     public void saveSession() {
+        dersOturumu.stopTimer();
         dersOturumu.setYazilan(dersIcerikPaneli.getYazilan());
         try {
             dersOturumu.kaydet();
-            dersOturumu.stopTimer();
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this,
                     "Oturum kaydedilirken hata olustu! + " + e.getMessage(),
@@ -92,7 +95,7 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
             if (!basladi) {
                 basladi = true;
                 dersOturumu.devamEt();
-                EventBus.publish(new StatusEvent("Oturum basladi. Duraklama icin ESC tusunu kullanin."));
+                EventBus.publish(I18n.getText("oturum.basladi"));
             }
             // eger ders duramlamis ise
             if (durakladi) {
@@ -109,13 +112,13 @@ public class AnaDersPaneli extends JPanel implements KeyListener {
         } else {
             if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
                 if (!durakladi) {
-                    EventBus.publish(new StatusEvent("Oturum Durakladi.. Tusa basarak devam edebilirsiniz."));
+                    EventBus.publish(I18n.getText("oturum.durakladi"));
                     durakladi = true;
                     dersOturumu.durakla();
                 } else {
                     dersOturumu.devamEt();
                     durakladi = false;
-                    EventBus.publish(new StatusEvent("Oturum devam ediyor. Duraklama icin ESC tusunu kullanin."));
+                    EventBus.publish(I18n.getText("oturum.devamediyor"));
                 }
             }
             dersIcerikPaneli.ozelKarakter(e);

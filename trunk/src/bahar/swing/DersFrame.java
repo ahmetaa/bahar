@@ -42,7 +42,7 @@ public class DersFrame extends JDialog {
     @EventSubscriber(eventClass = DersEvent.class)
     public void onEvent(DersEvent event) {
         if (event.dersSonucuKapandi) {
-            anaDersPaneli.saveSession();
+            //anaDersPaneli.saveSession();
             closeWindow();
         }
     }

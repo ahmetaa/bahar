@@ -3,7 +3,7 @@ package bahar.swing;
 public class DersEvent {
 
     boolean dersSonlandi;
-    boolean dersSonucuKapandi;
+    boolean dersSonucuKapandi = false;
 
     public DersEvent(boolean dersSonlandi) {
         this.dersSonlandi = dersSonlandi;
